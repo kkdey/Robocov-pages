@@ -225,11 +225,12 @@ div.section {
 <strong>workflowr checks:</strong> <small>(Click a bullet for more information)</small>
 <ul>
 <li>
-<p><details> <summary> <strong style="color:red;">✖</strong> <strong>R Markdown file:</strong> uncommitted changes </summary> The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p><details> <summary> <strong style="color:blue;">✔</strong> <strong>R Markdown file:</strong> up-to-date </summary></p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </details>
 </li>
 <li>
-<p><details> <summary> <strong style="color:blue;">✔</strong> <strong>Repository version:</strong> <a href="https://github.com/kkdey/Robocov-pages/tree/47185fdc5cac16194da35f905099fe23e38cfd0e" target="_blank">47185fd</a> </summary></p>
+<p><details> <summary> <strong style="color:blue;">✔</strong> <strong>Repository version:</strong> <a href="https://github.com/kkdey/Robocov-pages/tree/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa" target="_blank">c6c31f2</a> </summary></p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 <pre><code>
 Ignored files:
@@ -237,86 +238,10 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    docs/.DS_Store
+    Ignored:    docs/figure/.DS_Store
+    Ignored:    docs/figure/pLI_shet_robospan_probospan.Rmd/.DS_Store
     Ignored:    draft/
-    Ignored:    output/output_sparse/
-
-Untracked files:
-    Untracked:  .gitignore~
-    Untracked:  analysis/SEG_housekeeping_enrich.Rmd
-    Untracked:  analysis/band_prec_robocov.Rmd
-    Untracked:  analysis/blood_corspan_robospan_probospan.Rmd
-    Untracked:  analysis/corspan_robospan_probospan.Rmd
-    Untracked:  analysis/diff_robospan_examples.Rmd
-    Untracked:  analysis/eigenvalues_hub.Rmd
-    Untracked:  analysis/figure2.Rmd
-    Untracked:  analysis/gtex_analysis_robocov_examples.Rmd
-    Untracked:  analysis/gtex_pRobocov_pRobospan.Rmd
-    Untracked:  analysis/gtex_predictive_robocov.Rmd
-    Untracked:  analysis/gtex_rank_imputation.Rmd
-    Untracked:  analysis/gtex_robocov.Rmd
-    Untracked:  analysis/gtex_robocov_ex_robospan.Rmd
-    Untracked:  analysis/housekeeping_PPI_MR_enrichment.Rmd
-    Untracked:  analysis/hub_robocov.Rmd
-    Untracked:  analysis/mean_robocov.Rmd
-    Untracked:  analysis/pLI_shet_robospan_probospan.Rmd
-    Untracked:  analysis/predictive_analytics_gtex.Rmd
-    Untracked:  analysis/robocov_demo.Rmd
-    Untracked:  analysis/robospan_blood_compare.Rmd
-    Untracked:  analysis/robospan_corr.Rmd
-    Untracked:  analysis/summary_correlation_structure.Rmd
-    Untracked:  analysis/supp_figure_simulation.Rmd
-    Untracked:  analysis/toeplitz_robocov.Rmd
-    Untracked:  code/  robocov_sim.R
-    Untracked:  code/FDR_Robospan.R
-    Untracked:  code/Joints_Nov24.R
-    Untracked:  code/Untitled.R
-    Untracked:  code/annot_size.R
-    Untracked:  code/band_prec_ocor_sim.R
-    Untracked:  code/band_prec_pcor_sim.R
-    Untracked:  code/band_prec_sim.R
-    Untracked:  code/band_prec_sim2.R
-    Untracked:  code/bandprec_cor_sim.R
-    Untracked:  code/baseline_strategies.R
-    Untracked:  code/corr_span.R
-    Untracked:  code/correlation_gene_scores.R
-    Untracked:  code/gene_score_all_strategies.R
-    Untracked:  code/gtex_robocov.R
-    Untracked:  code/gtex_robocov_precision.R
-    Untracked:  code/hub_prec_cor_sim.R
-    Untracked:  code/hub_sim.R
-    Untracked:  code/hub_sim2.R
-    Untracked:  code/hub_sim_sparse.R
-    Untracked:  code/joint_robocov_model.R
-    Untracked:  code/joints_robocov.R
-    Untracked:  code/many_tau_star.R
-    Untracked:  code/maxHiCgene.R
-    Untracked:  code/meta_enrich.R
-    Untracked:  code/meta_single_enrich.R
-    Untracked:  code/postprocess_hub_toeplitz.R
-    Untracked:  code/predictive_analytics_hub.R
-    Untracked:  code/predictive_analytics_toeplitz.R
-    Untracked:  code/robocov_gtex.R
-    Untracked:  code/robocov_gtex_blood.R
-    Untracked:  code/robocov_gtex_brain.R
-    Untracked:  code/sim_results.R
-    Untracked:  code/single_tau_star.R
-    Untracked:  code/toeplitz_prec_cor_sim.R
-    Untracked:  code/toeplitz_sim.R
-    Untracked:  code/toeplitz_sim2.R
-    Untracked:  code/toeplitz_sim_sparse.R
-    Untracked:  data/Cor_pairwise_all_genes.rda
-    Untracked:  data/Gene_Scores/
-    Untracked:  data/Robocov_Box_all_genes.rda
-    Untracked:  data/Robocov_Precision_all_genes.rda
-    Untracked:  data/gene_names_GTEX_V6.txt
-    Untracked:  data/housekeeping_genes.txt
-    Untracked:  data/person_tissue_genes_voom.rda
-    Untracked:  docs/figure/
-    Untracked:  sim_code/
-
-Unstaged changes:
-    Modified:   .gitignore
-    Modified:   analysis/index.Rmd
+    Ignored:    output/
 
 </code></pre>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes. </details>
@@ -350,16 +275,33 @@ Message
 Rmd
 </td>
 <td style="text-align:left;">
-<a href="https://github.com/kkdey/Robocov-pages/blob/47185fdc5cac16194da35f905099fe23e38cfd0e/analysis/index.Rmd" target="_blank">47185fd</a>
+<a href="https://github.com/kkdey/Robocov-pages/blob/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/analysis/index.Rmd" target="_blank">c6c31f2</a>
 </td>
 <td style="text-align:left;">
 Kushal K Dey
 </td>
 <td style="text-align:left;">
-2019-07-21
+2020-03-08
 </td>
 <td style="text-align:left;">
-Start workflowr project.
+workflow project
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+html
+</td>
+<td style="text-align:left;">
+<a href="https://cdn.rawgit.com/kkdey/Robocov-pages/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/docs/index.html" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+<td style="text-align:left;">
+workflow project
 </td>
 </tr>
 </tbody>
