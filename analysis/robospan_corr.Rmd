@@ -1,0 +1,84 @@
+---
+title: "Correlation of Robospan and pRobospan scores"
+author: "Kushal K. Dey"
+date: "11/24/2019"
+output: html_document
+---
+
+```{r}
+library(corrplot)
+```
+
+In this script, we investigate the correlations between different Robospan and pRobospan scores.
+
+```{r}
+corspan_all = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Corspan_mean.txt")
+corspan_blood = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Corspan_Mean_Blood.txt")
+robospan_all = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Robospan_mean.txt")
+robospan_blood = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Robospan_Mean_Blood.txt")
+probospan_all = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/pRobospan_mean.txt")
+probospan_blood = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/pRobospan_Mean_Blood.txt")
+```
+
+
+```{r}
+dim(robospan_all)
+```
+
+```{r}
+ensembl_gene_symbol = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/ensembl_and_hgnc_symbols.txt")
+
+annot_df = matrix(0, nrow(ensembl_gene_symbol), 6)
+rownames(annot_df) = as.character(ensembl_gene_symbol[,2])
+
+annot_df[match(corspan_all[,1], rownames(annot_df)), 1] = 1
+annot_df[match(corspan_blood[,1], rownames(annot_df)), 2] = 1
+annot_df[match(robospan_all[,1], rownames(annot_df)), 3] = 1
+annot_df[match(robospan_blood[,1], rownames(annot_df)), 4] = 1
+annot_df[match(probospan_all[,1], rownames(annot_df)), 5] = 1
+annot_df[match(probospan_blood[,1], rownames(annot_df)), 6] = 1
+
+
+colnames(annot_df) = c("Corspan10",
+                       "Corspan-Blood",
+                       "Robospan10",
+                       "Robospan-Blood",
+                       "pRobospan10",
+                       "pRobospan-Blood")
+cormat = cor(annot_df)
+rownames(cormat) = colnames(annot_df)
+colnames(cormat) = colnames(annot_df)
+
+cormat
+
+```
+
+```{r fig.height=10, fig.width=10}
+corrplot(cor(annot_df[,c(1,3,5)]),  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 2, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+## Correlation between the S2G strategies 
+
+```{r}
+cormat = get(load("/Users/kushaldey/Documents/Mouse_Humans/draft/cor_S2G.rda"))
+colnames(cormat) = c("TSS", "Coding", "Promoter", "100kb", "5kb",
+                      "PC-HiC", "ABC", "ATAC-human", "ATAC", "Roadmap", "eQTL")
+rownames(cormat) = colnames(cormat)
+cormat = cormat[c(1, 2, 3, 10, 5, 4), c(1, 2, 3, 10, 5, 4)]
+rownames(cormat)
+```
+
+
+```{r fig.height=10, fig.width=10}
+library(corrplot)
+corrplot(cormat,  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 2, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+
+```

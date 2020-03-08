@@ -1,0 +1,108 @@
+---
+title: "GTEx rank issue and imputation problem"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "11/25/2019"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(corrplot)
+library(softImpute)
+```
+
+In this script, we show that the GTEx tissue-wide gene expression data across individuals does not have a low rank factorization by looking at the eigen-values of the pairwise sample correlation matrix for a gene (PLIN1) from the GTEx genes.
+
+We also show that imputation based models such as SoftImpute or simple median based interpolationwill fail miserably when the data contains extensive amounts of missing entries as in case of GTEx. 
+
+```{r}
+robocov_all_genes = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Box_all_genes.rda"))
+```
+
+
+```{r fig.height=10, fig.width=10}
+corrplot(robocov_all_genes[,,"ENSG00000186517"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+```{r}
+plot(eigen(as.matrix(robocov_all_genes[,,"ENSG00000186517"]))$values,
+     xlab = "Features (tissues)", ylab = "Eigenvalues",
+     main = "Eigenvalue trend for ARHGAP30 gene",
+     col = "red",
+     pch=20)
+```
+
+## Column median imputation 
+
+```{r}
+dat = get(load("/Users/kushaldey/Documents/Robocov-pages/data/person_tissue_genes_voom.rda"))
+```
+
+```{r}
+gene_dat = dat[,,"ENSG00000166819"]
+gene_dat_imputed = apply(gene_dat, 2, function(x) {
+  y = x
+  y[which(is.na(x))] = median(x[!is.na(x)])
+  return(y)
+})
+```
+
+```{r fig.height=10, fig.width=10}
+cormat = cor(gene_dat_imputed)
+corrplot(cormat,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+## SoftImpute imputation
+
+```{r}
+impute_method <- "svd"
+matc=biScale(dat[,,"ENSG00000166819"],col.scale=TRUE,row.scale=FALSE,trace=TRUE)
+fits3=softImpute(matc,rank.max=50,lambda=1,type=impute_method)
+fitted_mat <- complete(dat[,,"ENSG00000166819"],fits3,unscale=T)
+cormat <- cor(fitted_mat)
+```
+
+
+```{r fig.height=10, fig.width=10}
+corrplot(cormat,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+```{r}
+impute_method <- "svd"
+matc=biScale(dat[,,"ENSG00000166819"],col.scale=TRUE,row.scale=FALSE,trace=TRUE)
+fits3=softImpute(matc,rank.max=50,lambda=1,type=impute_method)
+fitted_mat <- complete(dat[,,"ENSG00000166819"],fits3,unscale=F)
+cormat <- cor(fitted_mat)
+```
+
+```{r fig.height=10, fig.width=10}
+corrplot(cormat,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+Pairwise sample correlation matrix 
+
+```{r fig.height=10, fig.width=10}
+cormat = cor(gene_dat, use = "pairwise.complete.obs")
+corrplot(cormat,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+

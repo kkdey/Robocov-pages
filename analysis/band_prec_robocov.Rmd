@@ -1,0 +1,211 @@
+---
+title: "Robocov application on 1-band precision matrix network models"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "11/22/2019"
+output: html_document
+---
+
+```{r warning=F, message=F}
+library(glasso)
+library(corpcor)
+library(Matrix)
+library(psych)
+library(CVXR)
+library(Robocov)
+library(CorShrink)
+library(ggplot2)
+library(corrplot)
+```
+
+## Banded precision matrix for population.
+
+```{r}
+banded_prec_sim = function(N, P){
+  diags <- list()
+  diags[[1]] <- rep(1, P)
+  diags[[2]] <- rep(-0.5, P)
+  Kinv <- bandSparse(P, k = -(0:1), diag = diags, symm = TRUE)
+  K <- solve(Kinv)
+  corSigma <- cov2cor(K)
+  data <- MASS::mvrnorm(N,rep(0,P),corSigma)
+  ll = list("dat" = data, "cor" = corSigma)
+  return(ll)
+}
+
+nloglik = function(data, cormat){
+  llik = 0
+  for(m in 1:nrow(data)){
+    idx = which(!is.na(data[m,]))
+    if(length(idx) > 2){
+      llik = llik + emdbook::dmvnorm(data[m, idx], rep(0, length(idx)), cormat[idx, idx], log = T)
+    }
+  }
+  return(-llik)
+}
+
+angle_norm = function(S, Sigma){
+  dist = 1 - (tr(as.matrix(cov2cor(S)%*%cov2cor(Sigma))))/(norm(cov2cor(S), type = "F")* norm(Sigma, type = "F"))
+  return(dist)
+}
+
+
+```
+
+## Data generation
+
+```{r}
+N=500
+P=50
+prop_missing = 0.25
+
+corSigma = as.matrix(banded_prec_sim(N, P)$cor)
+
+data = banded_prec_sim(N, P)$dat
+
+  #######################   Turn some of the entries to NA   ###################################
+
+data_missing = t(apply(data, 1, function(x){
+  if(prop_missing > 0){
+    rand = sample(1:length(x), floor(prop_missing*length(x)), replace = F)
+    y = x
+    y[rand] = NA
+    return(y)
+  }else{
+    return(x)
+  }}))
+```
+
+## Pop
+
+```{r}
+corrplot(corSigma,  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "n", tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+
+```
+
+## p-Pop
+
+```{r}
+pcorSigma = -cov2cor(as.matrix(solve(corSigma)))
+diag(pcorSigma) = 1
+corrplot(pcorSigma,  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "n", tl.cex = 1.5, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+
+```
+
+## Standard
+
+```{r}
+standard_cor = cor(data_missing, use = "pairwise.complete.obs")
+corrplot(standard_cor,  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "n", tl.cex = 1.5, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+
+```
+
+
+## Robocov
+
+```{r}
+robocov_box_cor = Robocov_cor(data_with_missing = data_missing, loss = "lasso")
+corrplot(robocov_box_cor,  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "n", tl.cex = 1.5, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+
+```
+
+
+## p-Robocov
+
+```{r}
+robo_prec = Robocov_precision(data_with_missing = data_missing, alpha = 0.1, lambda=1)
+corrplot(robo_prec,  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "n", tl.cex = 1.5, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+
+
+## CorShrink
+
+```{r}
+cov_sample_ML <-  CorShrinkData(data_missing, sd_boot = FALSE,
+                                  ash.control = list())
+corshrink_cor = cov2cor(cov_sample_ML$cor)
+corrplot(corshrink_cor,  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "n", tl.cex = 1.5, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+
+```
+
+
+## Eigenvalue trends
+
+```{r}
+NUM=20
+df = cbind(eigen(corSigma)$values[1:NUM], eigen(standard_cor)$values[1:NUM],
+eigen(robocov_box_cor)$values[1:NUM], eigen(corshrink_cor)$values[1:NUM])
+colnames(df) = c("Pop-corr", "Sample-Corr", "Robocov-Corr", "CorShrink")
+df
+
+```
+
+```{r}
+eigs.df <- data.frame ("x" = rep(1:NUM, 4),
+                       "y" = c(df[,1], df[,2], df[,3], df[,4]),
+                       "color" = factor(c(rep("Pop", NUM), 
+                                   rep("Sample",  NUM), 
+                                   rep("Robocov", NUM),
+                                   rep("Corshrink", NUM)),
+                                   levels = c("Pop", "Robocov", "Corshrink", "Sample")))
+
+p <- ggplot(eigs.df, aes(x=x, y=y, colour=color, linetype = color)) + geom_line(lty = 1, lwd = 0.7) +
+  scale_linetype_manual(values = c(rep("solid", 4), rep("dashed", 1))) +
+  scale_colour_manual(values=c("#000000", "blue", "green", "gold",
+                               "red", "#0072B2", "#CC79A7", "#F0E442")) +
+  ggtitle(paste0("n=", N, ", p=", P, " \u03C0", "=", prop_missing)) + xlab("Index") + ylab("eigenvalues")+
+  theme_bw()
+p
+```
+
+```{r}
+NUM=20
+df = cbind(eigen(pcorSigma)$values[1:NUM], eigen(robo_prec)$values[1:NUM])
+colnames(df) = c("Pop", "Robocov")
+df
+
+eigs.df <- data.frame ("x" = rep(1:NUM, 4),
+                       "y" = c(df[,1], df[,2]),
+                       "color" = factor(c(rep("Pop", NUM),  
+                                   rep("Robocov", NUM)),
+                                   levels = c("Pop", "Robocov")))
+
+
+
+p <- ggplot(eigs.df, aes(x=x, y=y, colour=color, linetype = color)) + geom_line(lty = 1, lwd = 0.7) +
+  scale_linetype_manual(values = c(rep("solid", 4), rep("dashed", 1))) +
+  scale_colour_manual(values=c("#000000", "blue", "green", "gold",
+                               "red", "#0072B2", "#CC79A7", "#F0E442")) +
+  ggtitle(paste0("n=", N, ", p=", P, " \u03C0", "=", prop_missing)) + xlab("Index") + ylab("eigenvalues")+
+  theme_bw()
+p
+```
+
+
+
+
+

@@ -1,0 +1,123 @@
+---
+title: "Supplementary Figure 1"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "9/20/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(Matrix)
+```
+
+## Hub matrix graph 
+
+```{r}
+N=100
+P=100
+hub_sim = function(n, p, block){
+  mat <- 0.3*diag(1,block) + 0.7*rep(1,block) %*% t(rep(1, block))
+  Sigma <-   bdiag(mat, mat, mat, mat, mat, mat, mat, mat, mat, mat)
+  corSigma <- cov2cor(Sigma)
+  data <- MASS::mvrnorm(n,rep(0,p),corSigma)
+  ll = list("dat" = data, "cor" = corSigma)
+  return(ll)
+}
+corSigma = as.matrix(hub_sim(N, P, 10)$cor)
+```
+
+```{r}
+colnames(corSigma) = NULL
+rownames(corSigma) = NULL
+corrplot::corrplot(as.matrix(corSigma), method = "color",
+                     col = colorRampPalette(c("blue", "white", "red"))(200),
+                     tl.cex = 0.4, tl.col = "white",
+                     na.label.col = "white")
+dim(corSigma)
+```
+
+
+```{r}
+N=100
+P=50
+hub_sim = function(n, p, block){
+  mat <- 0.3*diag(1,block) + 0.7*rep(1,block) %*% t(rep(1, block))
+  Sigma <-   bdiag(mat, mat, mat, mat, mat)
+  corSigma <- cov2cor(Sigma)
+  data <- MASS::mvrnorm(n,rep(0,p),corSigma)
+  ll = list("dat" = data, "cor" = corSigma)
+  return(ll)
+}
+corSigma = as.matrix(hub_sim(N, P, 10)$cor)
+```
+
+```{r}
+colnames(corSigma) = NULL
+rownames(corSigma) = NULL
+corrplot::corrplot(as.matrix(corSigma), method = "color",
+                     col = colorRampPalette(c("blue", "white", "red"))(200),
+                     tl.cex = 0.4, tl.col = "white",
+                     na.label.col = "white")
+```
+
+
+```{r}
+DM_toeplitz = function(n,P){
+  library("MASS")
+  index1=sort(sample(seq(1:n),(n/2)))
+  index2=seq(1:n)[-index1]
+  Sigmatp=function(P){
+    a=array(0,dim=c(P,P))
+    for(i in 1:P){
+      for(j in 1:P){
+        a[i,j]=max(1-0.1*(abs(i-j)),0)
+      }
+    }
+    return(a)
+  }
+  Sigma = Sigmatp(P)
+  data = mvrnorm(n,rep(0,P),Sigma)
+  Xtest = data[index2,]
+  Xtrain = data[index1,]
+  Omega = solve(Sigma)
+  return(list(Xtrain = Xtrain, Xtest = Xtest, Sigma = Sigma))
+}
+
+
+toeplitz_sim = function(N, P){
+  ll <- DM_toeplitz(n=N, P=P)
+  data <- rbind(ll$Xtrain, ll$Xtest)
+  Sigma <- ll$Sigma
+  corSigma <- cov2cor(Sigma)
+  ll = list("dat" = data, "cor" = corSigma)
+  return(ll)
+}
+```
+
+```{r}
+N=100
+P=100
+corSigma = as.matrix(toeplitz_sim(N, P)$cor)
+colnames(corSigma) = NULL
+rownames(corSigma) = NULL
+corrplot::corrplot(as.matrix(corSigma), method = "color",
+                     col = colorRampPalette(c("blue", "white", "red"))(200),
+                     tl.cex = 0.4, tl.col = "white",
+                     na.label.col = "white")
+```
+
+
+```{r}
+N=100
+P=50
+corSigma = as.matrix(toeplitz_sim(N, P)$cor)
+colnames(corSigma) = NULL
+rownames(corSigma) = NULL
+corrplot::corrplot(as.matrix(corSigma), method = "color",
+                     col = colorRampPalette(c("blue", "white", "red"))(200),
+                     tl.cex = 0.4, tl.col = "white",
+                     na.label.col = "white")
+```

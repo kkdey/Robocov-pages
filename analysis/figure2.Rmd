@@ -1,0 +1,101 @@
+---
+title: "Three GTEx examples of Robocov"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "11/25/2019"
+output: html_document
+---
+
+```{r}
+library(corrplot)
+library(ggplot2)
+```
+
+We present here three examples of genes that have distinct characteristic patterns of tissue-wide correlations.
+
+```{r}
+robocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Box_all_genes.rda"))
+probocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Precision_all_genes.rda"))
+robospan = apply(robocov_gtex, 3, sum)/(53*53)
+```
+
+```{r}
+robospan[order(robospan, decreasing = T)[1:10]]
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(robocov_gtex[,,"ENSG00000163682"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(robocov_gtex[,,"ENSG00000244734"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+
+```{r}
+robospan[order(robospan, decreasing = F)[1:10]]
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(robocov_gtex[,,"ENSG00000228205"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(robocov_gtex[,,"ENSG00000188505"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+
+```{r fig.height=8, fig.width=8}
+corrplot(probocov_gtex[,,"ENSG00000163682"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(probocov_gtex[,,"ENSG00000244734"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+
+## Medan patterns 
+
+```{r}
+mean_robocov = apply(robocov_gtex, c(1,2), median)
+mean_probocov = apply(probocov_gtex, c(1,2), median)
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(mean_robocov,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(mean_probocov,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```

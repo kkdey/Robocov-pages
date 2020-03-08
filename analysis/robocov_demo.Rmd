@@ -1,0 +1,84 @@
+---
+title: "Robocov demo on a gene"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "12/1/2019"
+output: html_document
+---
+
+```{r}
+library(corrplot)
+library(ggplot2)
+```
+
+## Correlation structure 
+
+```{r}
+probocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Precision_all_genes.rda"))
+robocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Box_all_genes.rda"))
+cor_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Cor_pairwise_all_genes.rda"))
+```
+
+## ARHGAP30
+
+### Robocov
+
+```{r fig.height=10, fig.width=10}
+corrplot(robocov_gtex[,,"ENSG00000186517"],  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+### pRobocov 
+
+```{r fig.height=10, fig.width=10}
+corrplot(probocov_gtex[,,"ENSG00000186517"],  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+### Correlation
+
+```{r fig.height=10, fig.width=10}
+corrplot(cor_gtex[,,"ENSG00000186517"],  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+
+## GSTM1
+
+```{r fig.height=10, fig.width=10}
+corrplot(robocov_gtex[,,"ENSG00000134184"],  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+### pRobocov 
+
+```{r fig.height=10, fig.width=10}
+corrplot(probocov_gtex[,,"ENSG00000134184"],  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+### Correlation
+
+```{r fig.height=10, fig.width=10}
+corrplot(cor_gtex[,,"ENSG00000134184"],  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+

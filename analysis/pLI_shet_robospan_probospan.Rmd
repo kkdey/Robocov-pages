@@ -1,0 +1,184 @@
+---
+title: "pLI and shet scores comparison with Robospan and pRobospan scores"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "11/25/2019"
+output: html_document
+---
+
+```{r}
+library(readxl)
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We compare the Robospan and pRobospan extent scores across all genes with respect to pLI and shet constraint-based scores.
+
+We first compute the full Robospan and pRobospan scores.
+
+## pRobospan score 
+
+```{r}
+probocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Precision_all_genes.rda"))
+probospan = apply(probocov_gtex, 3, sum)/(53*53)
+ensembl_gene_symbol = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/ensembl_and_hgnc_symbols.txt")
+gene_symbols = ensembl_gene_symbol[match(names(probospan), ensembl_gene_symbol[,1]), 2]
+probospan2 = probospan[which(!is.na(gene_symbols))] 
+names(probospan2) = gene_symbols[which(!is.na(gene_symbols))]
+```
+
+```{r}
+df = cbind.data.frame(names(probospan2), as.numeric(probospan2))
+write.table(df, file = "/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/pRobospan_mean_full.txt",
+            row.names = F, col.names = F, sep = "\t", quote=F)
+```
+
+## Robospan score 
+
+```{r}
+robocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Box_all_genes.rda"))
+robospan = apply(robocov_gtex, 3, sum)/(53*53)
+ensembl_gene_symbol = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/ensembl_and_hgnc_symbols.txt")
+gene_symbols = ensembl_gene_symbol[match(names(robospan), ensembl_gene_symbol[,1]), 2]
+robospan2 = robospan[which(!is.na(gene_symbols))] 
+names(robospan2) = gene_symbols[which(!is.na(gene_symbols))]
+```
+
+```{r}
+df = cbind.data.frame(names(robospan2), as.numeric(robospan2))
+write.table(df, file = "/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Robospan_mean_full.txt",
+            row.names = F, col.names = F, sep = "\t", quote=F)
+```
+
+## Corspan score 
+
+```{r}
+cor_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Cor_pairwise_all_genes.rda"))
+corspan = apply(cor_gtex, 3, sum)/(53*53)
+ensembl_gene_symbol = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/ensembl_and_hgnc_symbols.txt")
+gene_symbols = ensembl_gene_symbol[match(names(corspan), ensembl_gene_symbol[,1]), 2]
+corspan2 = corspan[which(!is.na(gene_symbols))] 
+names(corspan2) = gene_symbols[which(!is.na(gene_symbols))]
+```
+
+```{r}
+df = cbind.data.frame(names(corspan2), as.numeric(corspan2))
+write.table(df, file = "/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Corspan_mean_full.txt",
+            row.names = F, col.names = F, sep = "\t", quote=F)
+```
+
+
+## pLI genes 
+
+```{r}
+pLI = read.table("/Users/kushaldey/Documents/Mouse_Humans/data/Gene_Scores/pLI_genes.txt")
+dim(pLI)
+```
+
+```{r}
+common_genes = intersect(pLI[,1], names(robospan2))
+pLI_common = pLI[match(common_genes, pLI[,1]), 2]
+robospan_common = robospan2[match(common_genes, names(robospan2))]
+probospan_common = probospan2[match(common_genes, names(probospan2))]
+corspan_common = corspan2[match(common_genes, names(corspan2))]
+
+cor(pLI[match(common_genes, pLI[,1]), 2], robospan2[match(common_genes, names(robospan2))])
+cor(pLI[match(common_genes, pLI[,1]), 2], probospan2[match(common_genes, names(probospan2))])
+cor(pLI[match(common_genes, pLI[,1]), 2], corspan2[match(common_genes, names(corspan2))])
+
+
+pLI_bin = c()
+robospan_bin = c()
+probospan_bin = c()
+corspan_bin = c()
+LL=50
+for(mm in 0:(LL-1)){
+  lower_q = quantile(pLI_common, mm*(1/LL))
+  upper_q = quantile(pLI_common, (mm+1)*(1/LL))
+  idx = which(pLI_common > lower_q & pLI_common < upper_q)
+  pLI_bin = c(pLI_bin, quantile(pLI_common, (mm+0.5)*(1/LL)))
+  robospan_bin = c(robospan_bin, mean(robospan_common[idx]))
+  probospan_bin = c(probospan_bin, mean(probospan_common[idx]))
+  corspan_bin = c(corspan_bin, mean(corspan_common[idx]))
+}
+```
+
+```{r}
+plot(pLI_bin, robospan_bin, col = "red", pch=20, 
+     xlab = "pLI quantile bins", ylab = "Avg. Robospan score per bin",
+     cex=1.5, cex.axis=1.1, cex.lab=1.2)
+```
+
+
+```{r}
+plot(pLI_bin, probospan_bin, col = "red", pch=20,
+     xlab = "pLI quantile bins", ylab = "Avg. pRobospan score per bin",
+     cex=1.5, cex.axis=1.1, cex.lab=1.2)
+```
+
+```{r}
+plot(pLI_bin, corspan_bin, col = "red", pch=20,
+     xlab = "pLI quantile bins", ylab = "Avg. Corspan score per bin",
+     cex=1.5, cex.axis=1.1, cex.lab=1.2)
+```
+
+
+
+## shet genes 
+
+```{r}
+shet2 = read_excel("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/shet.xlsx")
+shet = cbind.data.frame(shet2[,1], shet2[,2])
+head(shet)
+```
+
+
+```{r}
+common_genes = intersect(shet[,1], names(robospan2))
+shet_common = shet[match(common_genes, shet[,1]), 2]
+robospan_common = robospan2[match(common_genes, names(robospan2))]
+probospan_common = probospan2[match(common_genes, names(probospan2))]
+corspan_common = corspan2[match(common_genes, names(corspan2))]
+
+cor(shet[match(common_genes, shet[,1]), 2], robospan2[match(common_genes, names(robospan2))])
+cor(shet[match(common_genes, shet[,1]), 2], probospan2[match(common_genes, names(probospan2))])
+cor(shet[match(common_genes, shet[,1]), 2], corspan2[match(common_genes, names(corspan2))])
+
+
+shet_bin = c()
+robospan_bin = c()
+probospan_bin = c()
+corspan_bin = c()
+LL=50
+for(mm in 0:(LL-1)){
+  lower_q = quantile(shet_common, mm*(1/LL))
+  upper_q = quantile(shet_common, (mm+1)*(1/LL))
+  idx = which(shet_common > lower_q & shet_common < upper_q)
+  shet_bin = c(shet_bin, quantile(shet_common, (mm+0.5)*(1/LL)))
+  robospan_bin = c(robospan_bin, mean(robospan_common[idx]))
+  probospan_bin = c(probospan_bin, mean(probospan_common[idx]))
+  corspan_bin = c(corspan_bin, mean(corspan_common[idx]))
+}
+```
+
+
+```{r}
+plot(shet_bin, robospan_bin, col = "red", pch=20,
+     xlab = "s-het quantile bins", ylab = "Avg. Robospan score per bin",
+     cex=1.5, cex.axis=1.1, cex.lab=1.2)
+```
+
+```{r}
+plot(shet_bin, probospan_bin, col = "red", pch=20,
+     xlab = "s-het quantile bins", ylab = "Avg. pRobospan score per bin",
+     cex=1.5, cex.axis=1.1, cex.lab=1.2)
+```
+
+
+```{r}
+plot(shet_bin, corspan_bin, col = "red", pch=20,
+     xlab = "s-het quantile bins", ylab = "Avg. Corspan score per bin",
+     cex=1.5, cex.axis=1.1, cex.lab=1.2)
+```

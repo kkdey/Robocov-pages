@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Kushal K. Dey and Rahul Mazumder" />
+
+<meta name="date" content="2019-11-28" />
+
+<title>Housekeeping genes and PPI-Enhancer and Master-Regulator genes</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Robocov-pages</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/jdblischak/workflowr">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Housekeeping genes and PPI-Enhancer and Master-Regulator genes</h1>
+<h4 class="author"><em>Kushal K. Dey and Rahul Mazumder</em></h4>
+<h4 class="date"><em>11/28/2019</em></h4>
+
+</div>
+
+
+<p><strong>Last updated:</strong> 2020-03-08</p>
+<strong>workflowr checks:</strong> <small>(Click a bullet for more information)</small>
+<ul>
+<li>
+<p><details> <summary> <strong style="color:red;">✖</strong> <strong>R Markdown file:</strong> uncommitted changes </summary> The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</details>
+</li>
+<li>
+<p><details> <summary> <strong style="color:blue;">✔</strong> <strong>Environment:</strong> empty </summary></p>
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</details>
+</li>
+<li>
+<p><details> <summary> <strong style="color:blue;">✔</strong> <strong>Seed:</strong> <code>set.seed(20190721)</code> </summary></p>
+<p>The command <code>set.seed(20190721)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</details>
+</li>
+<li>
+<p><details> <summary> <strong style="color:blue;">✔</strong> <strong>Session information:</strong> recorded </summary></p>
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</details>
+</li>
+<li>
+<p><details> <summary> <strong style="color:blue;">✔</strong> <strong>Repository version:</strong> <a href="https://github.com/kkdey/Robocov-pages/tree/47185fdc5cac16194da35f905099fe23e38cfd0e" target="_blank">47185fd</a> </summary></p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    docs/.DS_Store
+    Ignored:    draft/
+    Ignored:    output/output_sparse/
+
+Untracked files:
+    Untracked:  .gitignore~
+    Untracked:  analysis/SEG_housekeeping_enrich.Rmd
+    Untracked:  analysis/band_prec_robocov.Rmd
+    Untracked:  analysis/blood_corspan_robospan_probospan.Rmd
+    Untracked:  analysis/corspan_robospan_probospan.Rmd
+    Untracked:  analysis/diff_robospan_examples.Rmd
+    Untracked:  analysis/eigenvalues_hub.Rmd
+    Untracked:  analysis/figure2.Rmd
+    Untracked:  analysis/gtex_analysis_robocov_examples.Rmd
+    Untracked:  analysis/gtex_pRobocov_pRobospan.Rmd
+    Untracked:  analysis/gtex_predictive_robocov.Rmd
+    Untracked:  analysis/gtex_rank_imputation.Rmd
+    Untracked:  analysis/gtex_robocov.Rmd
+    Untracked:  analysis/gtex_robocov_ex_robospan.Rmd
+    Untracked:  analysis/housekeeping_PPI_MR_enrichment.Rmd
+    Untracked:  analysis/hub_robocov.Rmd
+    Untracked:  analysis/mean_robocov.Rmd
+    Untracked:  analysis/pLI_shet_robospan_probospan.Rmd
+    Untracked:  analysis/predictive_analytics_gtex.Rmd
+    Untracked:  analysis/robocov_demo.Rmd
+    Untracked:  analysis/robospan_blood_compare.Rmd
+    Untracked:  analysis/robospan_corr.Rmd
+    Untracked:  analysis/summary_correlation_structure.Rmd
+    Untracked:  analysis/supp_figure_simulation.Rmd
+    Untracked:  analysis/toeplitz_robocov.Rmd
+    Untracked:  code/  robocov_sim.R
+    Untracked:  code/FDR_Robospan.R
+    Untracked:  code/Joints_Nov24.R
+    Untracked:  code/Untitled.R
+    Untracked:  code/annot_size.R
+    Untracked:  code/band_prec_ocor_sim.R
+    Untracked:  code/band_prec_pcor_sim.R
+    Untracked:  code/band_prec_sim.R
+    Untracked:  code/band_prec_sim2.R
+    Untracked:  code/bandprec_cor_sim.R
+    Untracked:  code/baseline_strategies.R
+    Untracked:  code/corr_span.R
+    Untracked:  code/correlation_gene_scores.R
+    Untracked:  code/gene_score_all_strategies.R
+    Untracked:  code/gtex_robocov.R
+    Untracked:  code/gtex_robocov_precision.R
+    Untracked:  code/hub_prec_cor_sim.R
+    Untracked:  code/hub_sim.R
+    Untracked:  code/hub_sim2.R
+    Untracked:  code/hub_sim_sparse.R
+    Untracked:  code/joint_robocov_model.R
+    Untracked:  code/joints_robocov.R
+    Untracked:  code/many_tau_star.R
+    Untracked:  code/maxHiCgene.R
+    Untracked:  code/meta_enrich.R
+    Untracked:  code/meta_single_enrich.R
+    Untracked:  code/postprocess_hub_toeplitz.R
+    Untracked:  code/predictive_analytics_hub.R
+    Untracked:  code/predictive_analytics_toeplitz.R
+    Untracked:  code/robocov_gtex.R
+    Untracked:  code/robocov_gtex_blood.R
+    Untracked:  code/robocov_gtex_brain.R
+    Untracked:  code/sim_results.R
+    Untracked:  code/single_tau_star.R
+    Untracked:  code/toeplitz_prec_cor_sim.R
+    Untracked:  code/toeplitz_sim.R
+    Untracked:  code/toeplitz_sim2.R
+    Untracked:  code/toeplitz_sim_sparse.R
+    Untracked:  data/Cor_pairwise_all_genes.rda
+    Untracked:  data/Gene_Scores/
+    Untracked:  data/Robocov_Box_all_genes.rda
+    Untracked:  data/Robocov_Precision_all_genes.rda
+    Untracked:  data/gene_names_GTEX_V6.txt
+    Untracked:  data/housekeeping_genes.txt
+    Untracked:  data/person_tissue_genes_voom.rda
+    Untracked:  docs/figure/
+    Untracked:  sim_code/
+
+Unstaged changes:
+    Modified:   .gitignore
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes. </details>
+</li>
+</ul>
+<hr />
+<div id="processing-gene-scores-corspan-robospan-and-probospan" class="section level2">
+<h2>Processing gene scores (Corspan, Robospan and pRobospan)</h2>
+<pre class="r"><code>probocov_gtex = get(load(&quot;/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Precision_all_genes.rda&quot;))
+robocov_gtex = get(load(&quot;/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Box_all_genes.rda&quot;))
+cor_gtex = get(load(&quot;/Users/kushaldey/Documents/Robocov-pages/data/Cor_pairwise_all_genes.rda&quot;))
+
+probospan = apply(probocov_gtex, 3, sum)/(53*53)
+robospan = apply(robocov_gtex, 3, sum)/(53*53)
+corspan = apply(cor_gtex, 3, sum)/(53*53)</code></pre>
+<p>Ensembl and Gene symbol names</p>
+<pre class="r"><code>ensembl_gene_symbol = read.table(&quot;/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/ensembl_and_hgnc_symbols.txt&quot;)
+head(ensembl_gene_symbol)</code></pre>
+<pre><code>               V1       V2
+1 ENSG00000000419     DPM1
+2 ENSG00000000457    SCYL3
+3 ENSG00000000460 C1orf112
+4 ENSG00000000938      FGR
+5 ENSG00000000971      CFH
+6 ENSG00000001036    FUCA2</code></pre>
+<pre class="r"><code>gene_symbols = ensembl_gene_symbol[match(names(probospan), ensembl_gene_symbol[,1]), 2]
+
+probospan2 = probospan[which(!is.na(gene_symbols))] 
+names(probospan2) = gene_symbols[which(!is.na(gene_symbols))]
+
+robospan2 = robospan[which(!is.na(gene_symbols))] 
+names(robospan2) = gene_symbols[which(!is.na(gene_symbols))]
+
+corspan2 = corspan[which(!is.na(gene_symbols))] 
+names(corspan2) = gene_symbols[which(!is.na(gene_symbols))]</code></pre>
+<pre class="r"><code>length(robospan2)</code></pre>
+<pre><code>[1] 13148</code></pre>
+<pre class="r"><code>corspan_top10 = names(corspan2)[order(corspan2, decreasing = T)[1:1600]]
+df = cbind.data.frame(corspan_top10, 1)
+write.table(df, file = &quot;/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Corspan_mean.txt&quot;,
+            quote = F, col.names = F, row.names = F, sep = &quot;\t&quot;)</code></pre>
+<pre class="r"><code>robospan2_df = read.table(&quot;/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Robospan_mean.txt&quot;)
+dim(robospan2_df)</code></pre>
+<pre><code>[1] 1600    2</code></pre>
+<pre class="r"><code>probospan2_df = read.table(&quot;/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/pRobospan_mean.txt&quot;)
+dim(probospan2_df)</code></pre>
+<pre><code>[1] 1600    2</code></pre>
+<pre class="r"><code>corspan2_df = read.table(&quot;/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Corspan_mean.txt&quot;)
+dim(corspan2_df)</code></pre>
+<pre><code>[1] 1600    2</code></pre>
+</div>
+<div id="housekeeping-genes" class="section level2">
+<h2>Housekeeping genes</h2>
+<pre class="r"><code>housekeep = read.table(&quot;/Users/kushaldey/Documents/Robocov-pages/data/housekeeping_genes.txt&quot;)
+head(housekeep)</code></pre>
+<pre><code>     V1        V2
+1  AAAS NM_015665
+2 AAGAB NM_024666
+3  AAMP NM_001087
+4  AAR2 NM_015511
+5  AARS NM_001605
+6 AARS2 NM_020745</code></pre>
+<pre class="r"><code>gene_names_gtex = as.character(read.table(&quot;/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/ensembl_and_hgnc_symbols.txt&quot;)[,2])</code></pre>
+<pre class="r"><code>length(intersect(housekeep[,1], robospan2_df[,1]))/length(intersect(housekeep[,1], gene_names_gtex))/ (1600/13500)</code></pre>
+<pre><code>[1] 0.8364218</code></pre>
+<pre class="r"><code>length(intersect(housekeep[,1], probospan2_df[,1]))/length(intersect(housekeep[,1], gene_names_gtex))/ (1600/13500)</code></pre>
+<pre><code>[1] 0.1440364</code></pre>
+<pre class="r"><code>length(intersect(housekeep[,1], corspan2_df[,1]))/length(intersect(housekeep[,1], gene_names_gtex))/ (1600/13500)</code></pre>
+<pre><code>[1] 0.7252358</code></pre>
+<pre class="r"><code>seg_gtex = read.table(&quot;/Users/kushaldey/Documents/Mouse_Humans/data/Gene_Scores/Fin_GTEx_WholeBlood.txt&quot;)
+dim(seg_gtex)</code></pre>
+<pre><code>[1] 1983    2</code></pre>
+<pre class="r"><code>length(intersect(seg_gtex[,1], robospan2_df[,1]))/length(intersect(seg_gtex[,1], gene_names_gtex))/ (1600/13500)</code></pre>
+<pre><code>[1] 1.480824</code></pre>
+<pre class="r"><code>length(intersect(seg_gtex[,1], probospan2_df[,1]))/length(intersect(seg_gtex[,1], gene_names_gtex))/ (1600/13500)</code></pre>
+<pre><code>[1] 2.524858</code></pre>
+<pre class="r"><code>length(intersect(seg_gtex[,1], corspan2_df[,1]))/length(intersect(seg_gtex[,1], gene_names_gtex))/ (1600/13500)</code></pre>
+<pre><code>[1] 1.459517</code></pre>
+<pre class="r"><code>head(seg_gtex, 50)</code></pre>
+<pre><code>         V1 V2
+1       FGR  1
+2    CASP10  1
+3  SLC22A16  1
+4    SLC4A1  1
+5     SKAP2  1
+6   FAM214B  1
+7       MPO  1
+8     ITGAL  1
+9    ITGA2B  1
+10   KRT33A  1
+11  ALDH3B1  1
+12  LGALS14  1
+13 CEACAM21  1
+14  SLC13A2  1
+15     MATK  1
+16    CD79B  1
+17     E2F2  1
+18     NADK  1
+19   TFAP2D  1
+20  PGLYRP1  1
+21    MMP25  1
+22     IL32  1
+23 TRAF3IP3  1
+24      CD4  1
+25    ABHD5  1
+26    PLAUR  1
+27   TYROBP  1
+28      LTF  1
+29    ALOX5  1
+30 SLC25A39  1
+31      CD6  1
+32    TACC3  1
+33     ACPP  1
+34  CCDC88C  1
+35      BID  1
+36  SLC11A1  1
+37    MARCO  1
+38    RUNX3  1
+39 SERPINB1  1
+40   SLC7A9  1
+41  SLC45A4  1
+42    RNF10  1
+43     DEF6  1
+44     TYMP  1
+45  RNASET2  1
+46     CD44  1
+47   SLAMF7  1
+48   BTN3A1  1
+49   IFNGR1  1
+50   SH2D2A  1</code></pre>
+</div>
+<div id="session-information" class="section level2">
+<h2>Session information</h2>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.5.1 (2018-07-02)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS High Sierra 10.13.6
+
+Matrix products: default
+BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] workflowr_1.1.1   Rcpp_1.0.1        digest_0.6.19    
+ [4] rprojroot_1.3-2   R.methodsS3_1.7.1 backports_1.1.4  
+ [7] magrittr_1.5      git2r_0.23.0      evaluate_0.12    
+[10] stringi_1.4.3     whisker_0.3-2     R.oo_1.22.0      
+[13] R.utils_2.7.0     rmarkdown_1.10    tools_3.5.1      
+[16] stringr_1.4.0     yaml_2.2.0        compiler_3.5.1   
+[19] htmltools_0.3.6   knitr_1.20       </code></pre>
+</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+<hr>
+<p>
+  This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a>
+  analysis was created with
+  <a href="https://github.com/jdblischak/workflowr">workflowr</a> 1.1.1
+</p>
+<hr>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+---
+title: "Robocov Blood enrichment compare"
+author: "Kushal K. Dey and Alkes Price"
+date: "11/23/2019"
+output: html_document
+---
+
+```{r}
+library(readxl)
+```
+
+We compare Robospan-All and Robospan-Blood  with other gene scores specific to blood or blood related traits.
+
+```{r}
+robospan_all = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Robospan_mean.txt")
+seg_blood = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Fin_GTEx_WholeBlood.txt")
+robospan_blood = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Robospan_Mean_Blood.txt")
+gene_names_gtex = as.character(read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/ensembl_and_hgnc_symbols.txt")[,2])
+
+```
+
+The overlap between the two scores: SEG-GTEx-Blood and Robospan-All is quite weak. Evidence below
+
+```{r}
+temp = intersect(robospan_all[,1], seg_blood[,1])
+length(temp)/length(robospan_all[,1])
+length(temp)/length(seg_blood[,1])
+```
+
+Slightly higher overlap of SEG-GTEx-Blood with Robospan-Blood but not super-high enrichment.
+
+```{r}
+temp = intersect(robospan_blood[,1], seg_blood[,1])
+length(temp)/length(robospan_blood[,1])
+length(temp)/length(seg_blood[,1])
+```
+
+We remove SEG-GTEx-Blood genes from Robospan-All genes.
+
+```{r}
+temp = setdiff(robospan_all[,1], seg_blood[,1])
+write.table(temp, file = "/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Robospan_all_comple_SEG_blood.txt",
+            row.names = F, col.names = F, quote = F, sep = "\t")
+```
+
+## Robopan-All on STRING PPI
+
+```{r}
+library(STRINGdb)
+string_db <- STRINGdb$new(version="10", species=9606,
+                          score_threshold=400, input_directory="")
+```
+
+```{r fig.width = 10, fig.height = 10}
+pi_drug_targets = data.frame(read_excel("/Users/kushaldey/Documents/Mouse_Humans/data/Pi_approved_drug_targets.xlsx"))
+test_genes = unique(pi_drug_targets[-1,4])
+
+df = data.frame(test_genes)
+ll <- string_db$map(df, "test_genes", removeUnmappedRows = TRUE )
+
+colors = rep("#FFFFFF", nrow(ll))
+colors[match(intersect(robospan_all[,1], ll$test_genes), ll$test_genes)] = "#000000"
+
+colors = as.factor(colors)
+
+payload_id <- string_db$post_payload( ll$STRING_id,
+                                      colors)
+
+string_db$plot_network(ll$STRING_id, payload_id=payload_id, required_score = 400)
+```
+
+
+```{r fig.width = 10, fig.height = 10}
+pi_drug_targets = data.frame(read_excel("/Users/kushaldey/Documents/Mouse_Humans/data/Pi_approved_drug_targets.xlsx"))
+test_genes = unique(pi_drug_targets[-1,4])
+
+df = data.frame(test_genes)
+ll <- string_db$map(df, "test_genes", removeUnmappedRows = TRUE )
+
+colors = rep("#FFFFFF", nrow(ll))
+colors[match(intersect(robospan_blood[,1], ll$test_genes), ll$test_genes)] = "#000000"
+
+colors = as.factor(colors)
+
+payload_id <- string_db$post_payload( ll$STRING_id,
+                                      colors)
+
+string_db$plot_network(ll$STRING_id, payload_id=payload_id, required_score = 400)
+```
+
+```{r}
+length(intersect(ll$test_genes, robospan_all[,1]))/length(intersect(ll$test_genes, gene_names_gtex))/(1600/14000)
+length(intersect(ll$test_genes, robospan_blood[,1]))/length(intersect(ll$test_genes, gene_names_gtex))/(1600/14000)
+```
+
+The genes from Robospan-all and Robospan-Blood are not enriched in the approved drug targets. We also compare with PPI-Enhancer and Master regulator genes 
+
+```{r}
+master_reg = read.table("/Users/kushaldey/Documents/Mouse_Humans/data/Gene_Scores/master_regulator_genes_Nov11.txt")
+ppi_enhancer = read.table("/Users/kushaldey/Documents/Mouse_Humans/data/RWR_Gene_Scores/RWR_SEG_ABC_HOMOD_EDS.txt")
+dim(master_reg)
+dim(ppi_enhancer)
+```
+
+```{r}
+length(intersect(master_reg[,1], robospan_all[,1]))/length(intersect(master_reg[,1], gene_names_gtex))/ (1600/13500)
+length(intersect(ppi_enhancer[,1], robospan_all[,1]))/length(intersect(ppi_enhancer[,1], gene_names_gtex))/ (1600/13500)
+```
+
+Agsin we did not see very high enrichment of these Robospan-Blood and Robospan-All genes with either PPI-Enhancer or Master-Regulator genes. 
+
+This suggests that Robospan scoring scheme is capturingn biologically relevant gene sets orthogonal to either Enhancer-regulated genes or Master-regulator genes. 
+
+## Enriched pathways
+
+The enriched pathways for Robospan-All genes are 
+
+- HSP90 chaperone cycle for steroid hormone receptors (SHR)
+- Interferon signaling
+- HSF1 activation
+- cytokine signaling
+- Immune system
+- Antigen presentation
+- Apoptosis
+- Circadian clock
+
+The enriched pathways for Robospan-Blood genes are 
+
+- Immune system
+- Innate immune system 
+- Neutrophil degranulation 
+- Antigen processing and presentation
+- Interferon signaling
+- HSF1 activation
+
+## Enrichment in housekeeping genes
+
+We next load the list of housekeeping genes.
+
+```{r}
+housekeep = read.table("/Users/kushaldey/Documents/Robocov-pages/data/housekeeping_genes.txt")
+```
+
+```{r}
+length(intersect(housekeep[,1], robospan_all[,1]))/length(intersect(housekeep[,1], gene_names_gtex))/ (1600/14000)
+length(intersect(housekeep[,1], robospan_blood[,1]))/length(intersect(housekeep[,1], gene_names_gtex))/ (1600/14000)
+```
+
+Again only moderate enrichment of signal among the house-keeping genes.
+
+Next we evaluate constraints on Robospan-All and Robospan-Blood genes.
+
+```{r}
+pLI_df = read.table("/Users/kushaldey/Documents/Mouse_Humans/data/Gene_Scores/pLI_genes.txt")
+boxplot(pLI_df[match(intersect(robospan_all[,1], pLI_df[,1]), pLI_df[,1]), 2],
+pLI_df[match(intersect(robospan_blood[,1], pLI_df[,1]), pLI_df[,1]), 2],
+pLI_df[,2])
+
+```
+
+```{r}
+pLI_high = pLI_df[which(pLI_df[,2] > 0.99), 1]
+length(intersect(pLI_high, robospan_all[,1]))/length(intersect(pLI_high, gene_names_gtex))/ (1600/14000)
+length(intersect(pLI_high, robospan_blood[,1]))/length(intersect(pLI_high, gene_names_gtex))/ (1600/14000)
+```
+
+```{r}
+pLI_low = pLI_df[which(pLI_df[,2] < 1e-08), 1]
+length(intersect(pLI_low, robospan_all[,1]))/length(intersect(pLI_low, gene_names_gtex))/ (1600/14000)
+length(intersect(pLI_low, robospan_blood[,1]))/length(intersect(pLI_low, gene_names_gtex))/ (1600/14000)
+```
+
+```{r}
+TF_genes = read.table("/Users/kushaldey/Documents/Mouse_Humans/data/Gene_Scores/TF_genes_curated.txt")
+length(intersect(TF_genes[,1], robospan_all[,1]))/length(TF_genes[,1])/ (1600/14000)
+length(intersect(TF_genes[,1], robospan_blood[,1]))/length(TF_genes[,1])/(1600/14000)
+```
+
+So, far we have not seen that much of a high enrichment of the known gene sets with the Robospan scores; which is interesting. So what is this unique feature that is captured by these scores?
+

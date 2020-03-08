@@ -1,0 +1,103 @@
+---
+title: "Housekeeping genes and PPI-Enhancer and Master-Regulator genes"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "11/28/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Processing gene scores (Corspan, Robospan and pRobospan)
+
+```{r}
+probocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Precision_all_genes.rda"))
+robocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Box_all_genes.rda"))
+cor_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Cor_pairwise_all_genes.rda"))
+
+probospan = apply(probocov_gtex, 3, sum)/(53*53)
+robospan = apply(robocov_gtex, 3, sum)/(53*53)
+corspan = apply(cor_gtex, 3, sum)/(53*53)
+```
+
+Ensembl and Gene symbol names 
+
+```{r}
+ensembl_gene_symbol = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/ensembl_and_hgnc_symbols.txt")
+head(ensembl_gene_symbol)
+```
+
+```{r}
+gene_symbols = ensembl_gene_symbol[match(names(probospan), ensembl_gene_symbol[,1]), 2]
+
+probospan2 = probospan[which(!is.na(gene_symbols))] 
+names(probospan2) = gene_symbols[which(!is.na(gene_symbols))]
+
+robospan2 = robospan[which(!is.na(gene_symbols))] 
+names(robospan2) = gene_symbols[which(!is.na(gene_symbols))]
+
+corspan2 = corspan[which(!is.na(gene_symbols))] 
+names(corspan2) = gene_symbols[which(!is.na(gene_symbols))]
+
+```
+
+```{r}
+length(robospan2)
+```
+
+```{r echo=TRUE, eval=FALSE}
+corspan_top10 = names(corspan2)[order(corspan2, decreasing = T)[1:1600]]
+df = cbind.data.frame(corspan_top10, 1)
+write.table(df, file = "/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Corspan_mean.txt",
+            quote = F, col.names = F, row.names = F, sep = "\t")
+```
+
+```{r}
+robospan2_df = read.table("/Users/kushaldey/Documents/Robocov-pages/Gene_Sets/Robospan_mean.txt")
+dim(robospan2_df)
+
+probospan2_df = read.table("/Users/kushaldey/Documents/Robocov-pages/Gene_Sets/pRobospan_mean.txt")
+dim(probospan2_df)
+
+corspan2_df = read.table("/Users/kushaldey/Documents/Robocov-pages/Gene_Sets/Corspan_mean.txt")
+dim(corspan2_df)
+```
+
+## Housekeeping genes 
+
+```{r}
+housekeep = read.table("/Users/kushaldey/Documents/Robocov-pages/Gene_Sets/housekeeping_genes.txt")
+head(housekeep)
+```
+
+```{r}
+gene_names_gtex = as.character(read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/ensembl_and_hgnc_symbols.txt")[,2])
+```
+
+```{r}
+length(intersect(housekeep[,1], robospan2_df[,1]))/length(intersect(housekeep[,1], gene_names_gtex))/ (1600/13500)
+length(intersect(housekeep[,1], probospan2_df[,1]))/length(intersect(housekeep[,1], gene_names_gtex))/ (1600/13500)
+length(intersect(housekeep[,1], corspan2_df[,1]))/length(intersect(housekeep[,1], gene_names_gtex))/ (1600/13500)
+```
+
+
+```{r}
+seg_gtex = read.table("/Users/kushaldey/Documents/Mouse_Humans/Gene_Sets/Fin_GTEx_WholeBlood.txt")
+dim(seg_gtex)
+```
+
+```{r}
+length(intersect(seg_gtex[,1], robospan2_df[,1]))/length(intersect(seg_gtex[,1], gene_names_gtex))/ (1600/13500)
+length(intersect(seg_gtex[,1], probospan2_df[,1]))/length(intersect(seg_gtex[,1], gene_names_gtex))/ (1600/13500)
+length(intersect(seg_gtex[,1], corspan2_df[,1]))/length(intersect(seg_gtex[,1], gene_names_gtex))/ (1600/13500)
+```
+
+```{r}
+head(seg_gtex, 50)
+```
+
+```{r}
+
+```
+

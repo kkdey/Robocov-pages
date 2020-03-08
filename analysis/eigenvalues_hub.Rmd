@@ -1,0 +1,11 @@
+---
+title: "Eigenvalue distribution - Hub"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "11/25/2019"
+output: html_document
+---
+
+We compare the trends in top 10 eigenvalues across different methods - sample correlation matrix, population correlation, CorShrink estimator and Robocov-estimator. We also look at the trends for population partial correlation estimator and the Robocov partial correlation estimator. In all settings, we assume $N=500$, $P=50$ and $pi=0.5$ (degree of missingness).
+
+
+

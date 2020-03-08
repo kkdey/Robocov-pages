@@ -1,0 +1,44 @@
+---
+title: "GTEx Robocov correlation"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "11/22/2019"
+output: html_document
+---
+
+We apply Robocov on the GTEx expression data (subjects, tissues, genes) that contains a huge number of missing
+entries.
+
+```{r}
+library(corrplot)
+library(CVXR)
+library(ggplot2)
+library(CorShrink)
+library(Robocov)
+```
+
+```{r}
+dat = get(load("/Users/kushaldey/Documents/Robocov-pages/data/person_tissue_genes_voom.rda"))
+num_samples_per_tissue = apply(dat[,,1], 2, function(x) return(length(which(!is.na(x)))))
+gene_names_gtex = as.character(read.table("/Users/kushaldey/Documents/Robocov-pages/data/gene_names_GTEX_V6.txt")[,1])
+gene_names_gtex = as.character(sapply(gene_names_gtex, function(z) return(strsplit(z, "[.]")[[1]][1])))
+# devtools::install_github("kkdey/CorShrink")
+library(CorShrink)
+library(CVXR)
+robomat = array(0, c(dim(dat)[2], dim(dat)[2], 100))
+for(n in 1:100){
+  out = suppressMessages(suppressWarnings(Robocov_box(data_with_missing = dat[,,n], loss = "elasticnet")))
+  robomat[,,n] = out
+  cat("We are at gene", n, "\n")
+}
+save(robomat, file = "/n/groups/price/kushal/Robocov/data/Robocov_all_genes.rda")
+
+```
+
+```{r}
+corrplot(out,  diag = TRUE,
+         col = colorRampPalette(c("blue", "white", "red"))(200),
+         tl.pos = "td", tl.cex = 0.4, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "upper")
+```
+

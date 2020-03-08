@@ -1,0 +1,99 @@
+---
+title: "GTEx Robocov demo and RoboSpan"
+author: "Kushal K. Dey and Alkes Price"
+date: "11/23/2019"
+output: html_document
+---
+
+```{r}
+library(Robocov)
+library(corrplot)
+library(ggplot2)
+```
+
+Here we illustrare the Robocov estimates for a few genes of interest and then introduce the concept of Robospan.
+
+```{r}
+robocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Box_all_genes.rda"))
+dim(robocov_gtex)
+```
+
+## HBB (ENSG00000244734)
+
+```{r}
+corrplot(robocov_gtex[,,"ENSG00000244734"],  diag = TRUE,
+         col = colorRampPalette(c("blue", "white", "red"))(200),
+         tl.pos = "td", tl.cex = 0.4, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "upper")
+```
+
+```{r}
+robospan = apply(robocov_gtex, 3, sum)/(53*53)
+plot(density(robospan), xlab = "Robospan score", ylab = "density")
+```
+
+```{r}
+robospan[order(robospan, decreasing = T)[1:10]]
+```
+
+```{r}
+robospan["ENSG00000244734"]
+```
+
+
+```{r}
+corrplot(robocov_gtex[,,"ENSG00000019991"],  diag = TRUE,
+         col = colorRampPalette(c("blue", "white", "red"))(200),
+         tl.pos = "td", tl.cex = 0.4, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "upper")
+```
+Ensembl and Gene symbol names 
+
+```{r}
+ensembl_gene_symbol = read.table("/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/ensembl_and_hgnc_symbols.txt")
+head(ensembl_gene_symbol)
+```
+
+```{r}
+gene_symbols = ensembl_gene_symbol[match(names(robospan), ensembl_gene_symbol[,1]), 2]
+robospan2 = robospan[which(!is.na(gene_symbols))] 
+names(robospan2) = gene_symbols[which(!is.na(gene_symbols))]
+```
+
+## Robospan mean 
+
+```{r}
+genes = names(robospan2)[order(robospan2, decreasing = T)[1:1600]]
+df = cbind.data.frame(genes, 1)
+write.table(df, file = "/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Robospan_mean.txt",
+            row.names = F, col.names = F, sep = "\t", quote=F)
+```
+
+## Robospan Num Up 0.1
+
+```{r}
+robospan = apply(robocov_gtex, 3, function(x) length(which(x > 0.1)))/(53*53)
+gene_symbols = ensembl_gene_symbol[match(names(robospan), ensembl_gene_symbol[,1]), 2]
+robospan2 = robospan[which(!is.na(gene_symbols))] 
+names(robospan2) = gene_symbols[which(!is.na(gene_symbols))]
+genes = names(robospan2)[order(robospan2, decreasing = T)[1:1600]]
+df = cbind.data.frame(genes, 1)
+write.table(df, file = "/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Robospan_Numbin_up_0_1.txt",
+            row.names = F, col.names = F, sep = "\t", quote=F)
+```
+
+## Robospan mean Blood 
+
+```{r}
+robospan = apply(robocov_gtex[,53,], 2, mean)
+gene_symbols = ensembl_gene_symbol[match(names(robospan), ensembl_gene_symbol[,1]), 2]
+robospan2 = robospan[which(!is.na(gene_symbols))] 
+names(robospan2) = gene_symbols[which(!is.na(gene_symbols))]
+genes = names(robospan2)[order(robospan2, decreasing = T)[1:1600]]
+df = cbind.data.frame(genes, 1)
+write.table(df, file = "/Users/kushaldey/Documents/Robocov-pages/data/Gene_Scores/Robospan_Mean_Blood.txt",
+            row.names = F, col.names = F, sep = "\t", quote=F)
+```
+

@@ -1,0 +1,119 @@
+---
+title: "S-LDSC results for Corspan, Robospan and pRobospan gene prioritizations"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "11/27/2019"
+output: html_document
+---
+
+Here we present S-LDSC results for Corspan, Robospan and pRobospan gene prioritizations.
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(latex2exp)
+require(gridExtra)
+library(xtable)
+scaleFUN <- function(x) sprintf("%.1f", x)
+```
+
+## tau-star
+
+```{r fig.width = 15, fig.height = 12}
+tau1 = c(0.04, 0.038)
+taus1 = c(0.024, 0.02)
+tau2 = c(0.086, 0.12)
+taus2 = c(0.024, 0.03)
+tau3 = c(0.096, 0.11)
+taus3 = c(0.028, 0.034)
+
+annots_pre = c("5kb", "100kb")
+annots = factor(rep(annots_pre, 3), levels = annots_pre)
+
+model = factor(c(rep("Corspan",2), rep("Robospan",2), rep("pRobospan", 2)),
+               levels = c("Corspan", "Robospan", "pRobospan"))
+
+df = data.frame(tau = c(tau1, tau2, tau3),
+                tau_sd = c(taus1, taus2, taus3),
+                class_annots = model,
+                model = model,
+                annots = annots)
+
+colors2 =  rep("black", 18)
+colors2[1:5] = "white"
+colors2[6:10] = "red"
+colors2[11:15] = "blue"
+
+p3 = ggplot(df, aes(x=annots, y=tau, fill=df$model)) +
+  geom_bar(position="dodge", stat="identity", colour = "black", size = 1.3) +
+  geom_errorbar(aes(ymin=tau-1.96*tau_sd, ymax=tau+1.96*tau_sd),
+                width=.5,
+                position = position_dodge(.9)) +
+  guides(fill=guide_legend(title="")) +
+  labs(x = "", y = TeX('$\\tau^ *$')) +
+  theme(axis.title.x = element_text(size=1)) +
+  scale_fill_manual(values=c("white", "red", "blue")) +
+  scale_color_manual(values=c("white", "red", "blue")) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 30,
+                                   color="black"), legend.position="top") +
+    scale_alpha_continuous(range(0,1), guide = FALSE)  +
+    ggtitle(TeX('$\\tau^ *$, meta-analyzed across 11 Blood + Autoimmune traits')) + 
+    theme(plot.title = element_text(size = 35, face = "bold", hjust = 0.5)) +
+    theme(legend.text=element_text(size=35)) +
+    theme(axis.title.y = element_text(size = 40)) + theme(axis.text.y = element_text(size = 40)) + 
+    theme(panel.background = element_blank(), axis.line = element_line(colour = "black")) 
+p3 
+
+
+```
+
+## Enrichments
+
+
+```{r fig.width = 15, fig.height = 12}
+tau1 = c(2.4, 2.1)
+taus1 = c(0.15, 0.1)
+tau2 = c(2.7, 2.3)
+taus2 = c(0.16, 0.12)
+tau3 = c(3.2, 2.4)
+taus3 = c(0.22, 0.12)
+
+annots_pre = c( "5kb", "100kb")
+annots = factor(rep(annots_pre, 3), levels = annots_pre)
+
+model = factor(c(rep("Corspan",2), rep("Robospan",2), rep("pRobospan", 2)),
+               levels = c("Corspan", "Robospan", "pRobospan"))
+
+df = data.frame(tau = c(tau1, tau2, tau3),
+                tau_sd = c(taus1, taus2, taus3),
+                class_annots = model,
+                model = model,
+                annots = annots)
+
+colors2 =  rep("black", 18)
+colors2[1:5] = "white"
+colors2[6:10] = "red"
+colors2[11:15] = "blue"
+
+p3 = ggplot(df, aes(x=annots, y=tau, fill=df$model)) +
+  geom_bar(position="dodge", stat="identity", colour = "black", size = 1.3) +
+  geom_errorbar(aes(ymin=tau-1.96*tau_sd, ymax=tau+1.96*tau_sd),
+                width=.5,
+                position = position_dodge(.9)) +
+  guides(fill=guide_legend(title="")) +
+  labs(x = "", y = TeX('Enrichment')) +
+  theme(axis.title.x = element_text(size=1)) +
+  scale_fill_manual(values=c("white", "red", "blue")) +
+  scale_color_manual(values=c("white", "red", "blue")) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 30,
+                                   color="black"), legend.position="top") +
+    scale_alpha_continuous(range(0,1), guide = FALSE)  +
+    ggtitle(TeX('ENR, meta-analyzed across 11 Blood + Autoimmune traits')) + 
+    theme(plot.title = element_text(size = 35, face = "bold", hjust = 0.5)) +
+    theme(legend.text=element_text(size=35)) +
+    theme(axis.title.y = element_text(size = 40)) + theme(axis.text.y = element_text(size = 40)) + 
+    theme(panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+    geom_hline(yintercept=1,  color = "black", linetype = "dashed")
+p3 
+
+```
+

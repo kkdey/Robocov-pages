@@ -1,0 +1,74 @@
+---
+title: "Mean and Median Robocov estimators across genes"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "11/28/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library("knitr")
+library(kableExtra)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(corrplot)
+opts_chunk$set(tidy=FALSE,tidy.opts=list(width.cutoff=30),dev="png",
+               fig.width=9,fig.height=9,
+               message=FALSE, warning = FALSE)
+```
+
+```{r}
+robocov_all_genes = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Box_all_genes.rda"))
+probocov_all_genes = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Precision_all_genes.rda"))
+dim(robocov_all_genes)
+dim(probocov_all_genes)
+```
+
+## Mean
+
+```{r}
+mean_robocov = apply(robocov_all_genes, c(1, 2), mean)
+mean_probocov = apply(probocov_all_genes, c(1, 2), mean)
+```
+
+```{r}
+corrplot(mean_robocov,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+
+```{r}
+corrplot(mean_probocov,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+## Median
+
+```{r}
+median_robocov = apply(robocov_all_genes, c(1, 2), median)
+median_probocov = apply(probocov_all_genes, c(1, 2), median)
+```
+
+```{r}
+corrplot(median_robocov,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+
+```{r}
+corrplot(median_probocov,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.8, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```

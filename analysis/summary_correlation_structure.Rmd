@@ -1,0 +1,48 @@
+---
+title: "Summary correlation structure"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "9/20/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Here we investigate the summary correlation structure across genes and house-keeping genes and SEG-GTEx genes.
+
+```{r}
+person_tissue_genes_robocov = get(load("/Users/kushaldey/Documents/Robocov-pages/output/Robocov_all_genes.rda"))
+```
+
+```{r}
+person_tissue_genes_cor = get(load("/Users/kushaldey/Documents/Robocov-pages/output/Cor_pairwise_all_genes.rda"))
+```
+
+```{r}
+library(Matrix)
+library(corrplot)
+```
+
+```{r}
+robocov_average = apply(person_tissue_genes_robocov, c(1,2), mean)
+cor_average =  apply(person_tissue_genes_cor, c(1,2), mean)
+```
+
+```{r}
+corrplot::corrplot(person_tissue_genes_robocov[,,"ENSG00000166819"],  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.4, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+```{r}
+corrplot::corrplot(cor_average,  diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.4, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
