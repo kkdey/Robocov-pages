@@ -1,5 +1,12 @@
 ---
 title: "Robocov data analysis"
+author: 
+- name: Kushal K Dey
+  affiliation:
+      - Department of Epidemiology and Biostatistics, Harvard T.H. Chan School of Public Health
+- name: Rahul Mazumder
+  affiliation:
+      - MIT Sloan School of Management
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
