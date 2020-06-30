@@ -39,7 +39,7 @@ df = data.frame(tau = c(tau1, tau2, tau3),
                 annots = annots)
 
 colors2 =  rep("black", 18)
-colors2[1:5] = "white"
+colors2[1:5] = "gray60"
 colors2[6:10] = "red"
 colors2[11:15] = "blue"
 
@@ -51,8 +51,8 @@ p3 = ggplot(df, aes(x=annots, y=tau, fill=df$model)) +
   guides(fill=guide_legend(title="")) +
   labs(x = "", y = TeX('$\\tau^ *$')) +
   theme(axis.title.x = element_text(size=1)) +
-  scale_fill_manual(values=c("white", "red", "blue")) +
-  scale_color_manual(values=c("white", "red", "blue")) +
+  scale_fill_manual(values=c("gray60", "red", "blue")) +
+  scale_color_manual(values=c("gray60", "red", "blue")) +
   theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 30,
                                    color="black"), legend.position="top") +
     scale_alpha_continuous(range(0,1), guide = FALSE)  +
@@ -90,7 +90,7 @@ df = data.frame(tau = c(tau1, tau2, tau3),
                 annots = annots)
 
 colors2 =  rep("black", 18)
-colors2[1:5] = "white"
+colors2[1:5] = "gray60"
 colors2[6:10] = "red"
 colors2[11:15] = "blue"
 
@@ -102,8 +102,8 @@ p3 = ggplot(df, aes(x=annots, y=tau, fill=df$model)) +
   guides(fill=guide_legend(title="")) +
   labs(x = "", y = TeX('Enrichment')) +
   theme(axis.title.x = element_text(size=1)) +
-  scale_fill_manual(values=c("white", "red", "blue")) +
-  scale_color_manual(values=c("white", "red", "blue")) +
+  scale_fill_manual(values=c("gray60", "red", "blue")) +
+  scale_color_manual(values=c("gray60", "red", "blue")) +
   theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 30,
                                    color="black"), legend.position="top") +
     scale_alpha_continuous(range(0,1), guide = FALSE)  +

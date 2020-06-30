@@ -1,0 +1,224 @@
+\section*{Supplementary Methods}
+
+\subsection{Proof of Lemma \ref{lemma1}}
+
+If a random variable $W \sim N \left ( 0, 1 \right) $, then for any small $\epsilon > 0$, we can get a number $M(\epsilon)$ such that 
+
+\begin{equation}\label{eq:eqW}
+    \Pr \left ( |W| < M(\epsilon) \right) > (1 - \epsilon)
+\end{equation}
+
+Using Equation \ref{eq:normalzsc} and \ref{eq:eqW}, we have 
+
+\begin{equation}\label{eq:zM}
+   \Pr \left ( |\hat{Z}_{ij} - Z_{ij} | < M(\epsilon) \eta(n_{ij}) \right) > \left ( 1 - \epsilon \right)
+\end{equation}
+
+The estimated and population correlations $\hat{R}_{ij}$ and $R_{ij}$ can be written in terms of the Z-scores using Equation \ref{eq:popzsc} as follows
+
+\begin{equation}\label{eq:Rbound}
+    \hat{R}_{ij} =  \frac{exp(2 \hat{Z}_{ij}) - 1 }{exp(2 \hat{Z}_{ij}) + 1} \hspace{0.5 cm} R_{ij} = \frac{exp(2 Z_{ij}) - 1 }{exp(2 Z_{ij}) + 1}
+\end{equation}
+
+Applying Taylor series expansion to $R_{ij}$ as a function of $Z_{ij}$ around $\hat{Z}_{ij}$ is given as follows 
+
+\begin{equation}\label{eq:taylor}
+    \frac{exp(2 Z_{ij}) - 1 }{exp(2 Z_{ij}) + 1}  =  \frac{exp(2 \hat{Z}_{ij}) - 1 }{exp(2 \hat{Z}_{ij}) + 1} + 4 \frac{exp(2 \hat{Z}_{ij})}{exp(2 \hat{Z}_{ij}) + 1} (\hat{Z}_{ij} - Z_{ij}) + 4 \frac{exp(2\xi){\left (exp(2\xi) - 1 \right )}}{\left (exp(2\xi) + 1 \right )^3} (\hat{Z}_{ij} - Z_{ij})^2
+\end{equation}
+
+where $\xi$ is a value between $Z_{ij}$ and $\hat{Z}_{ij}$. We can place an upper bound on the coefficient of the last term in Equation \ref{eq:taylor} (the quadratic term).
+
+\begin{equation}\label{eq:2derivbound}
+\left |\frac{exp(2\xi){\left( exp(2\xi) - 1 \right)}}{\left (exp(2\xi) + 1 \right )^3} \right | \leq \frac{1}{6 \sqrt{3}}
+\end{equation}
+
+Using Equations \ref{eq:Rbound}, \ref{eq:taylor} and \ref{eq:2derivbound}, we can write
+
+\begin{equation}\label{eq:boxbound}
+| \hat{R}_{ij} - R_{ij} |  \leq 4 \frac{exp(2 \hat{Z}_{ij})}{(exp(2 \hat{Z}_{ij}) + 1)^2} | \hat{Z}_{ij} - Z_{ij} | + \frac{2}{3\sqrt{3}} | \hat{Z}_{ij} - Z_{ij} |^2
+\end{equation}
+
+Using the definition of $\hat{Z}_{ij}$ in Equation \ref{eq:empzsc}, we get
+
+\begin{equation}
+    \frac{exp(2 \hat{Z}_{ij})}{(exp(2 \hat{Z}_{ij}) + 1)^2} = \frac{(1 - \hat{R}^2_{ij})}{4} 
+\end{equation}
+
+which will reduce \ref{eq:boxbound} as follows 
+
+\begin{equation}\label{eq:boxbound2}
+| \hat{R}_{ij} - R_{ij} |  \leq (1 - \hat{R}^2_{ij}) | \hat{Z}_{ij} - Z_{ij} | + \frac{2}{3\sqrt{3}} | \hat{Z}_{ij} - Z_{ij} |^2
+\end{equation}
+
+
+Using Equation \ref{eq:zM}, we can write
+
+\begin{equation}
+    \Pr \left (  | \hat{R}_{ij} - R_{ij} | < (1 - \hat{R}^2_{ij})M(\epsilon) + 2 \sqrt{3} M^2(\epsilon) \right ) > (1 - \epsilon)
+\end{equation}
+
+Since, $\hat{R}_{ij}$ and $R_{ij}$ are both correlation terms, they lie between $-1$ and $+1$ and hence follow the identity
+
+\begin{equation}\label{eq:naturalboxbound}
+| \hat{R}_{ij} - R_{ij} |  \leq 2
+\end{equation}
+
+Combining Equations \ref{eq:boxbound2} and \ref{eq:naturalboxbound}, we get 
+
+\begin{equation}\label{eq:boxbound3}
+    \Pr \left (  | \hat{R}_{ij} - R_{ij} | < min \left \{ 2, (1 - \hat{R}^2_{ij})M(\epsilon)\eta (n_{ij}) + \frac{2}{3\sqrt{3}} M^2(\epsilon)\eta^2 (n_{ij}) \right \} \right ) > (1 - \epsilon)
+\end{equation}
+
+We now move beyond the space of correlations $R$ to the space of covariances $\Sigma$.
+
+\begin{align} \label{eq:boxbound_Sigma}
+    |\hat{\Sigma}_{ij} - \Sigma_{ij} | & \leq \hat{d}_{i}\hat{R}_{ij} (\hat{d}_{j} - d_{j}) + d_{j} \hat{R}_{ij} ( \hat{d}_{i} - d_{i}) + d_i d_j (\hat{R}_{ij} - R_{ij}) \\
+    & = \hat{d}_i \hat{d}_j (\hat{R}_{ij} - R_{ij}) + \mathcal{O} (max (1/n_i, 1/n_j))
+\end{align}
+
+using consistency of $\hat{d}$ with respect to $d$ for normally distributed random variables.Therefore we can write that 
+
+\begin{equation}\label{eq:finalboxbound}
+    \Pr \left(| \hat{\Sigma}_{ij} - \Sigma_{ij} | < min \left \{ 2, (1 - \hat{R}^2_{ij})M(\epsilon)\eta (n_{ij}) + \frac{2}{3\sqrt{3}} M^2(\epsilon)\eta^2 (n_{ij}) \hat{d}_{i}\hat{d}_{j} + \mathcal{O} (max (1/n_i, 1/n_j)) \right \} \right) > (1 - \epsilon)
+\end{equation}
+
+For $\epsilon = 0.001$, we have $M(\epsilon) \approx 3$ and then 
+
+\begin{equation}\label{eq:boxbound4}
+    \Pr \left (  | \hat{R}_{ij} - R_{ij} | < min \left \{ 2, 3 (1 - \hat{R}^2_{ij})\eta(n_{ij}) + 2 \sqrt{3}\eta^2(n_{ij}) \right \} \right ) > (1 - \epsilon)
+\end{equation}
+
+which proves Corollary \ref{corollary1}. Usually this result holds good for any $n_{ij} > 3$. If however $n_{ij} \rightarrow \infty$ for all $(i,j)$ pairs, then the bound on $| \hat{R}_{ij} - R_{ij} |$ in Equation \ref{eq:boxbound3} approaches 0 and $\hat{R}_{ij}$ would be close to $R_{ij}$.
+
+\subsection{Proof of Lemma \ref{lemma2}}
+
+We re-write the $\hat{R}_{ij}$ as a function of the Fisher Z-scores 
+
+\begin{equation}\label{eq:hatR_to_hatZ}
+    \hat{R}_{ij} = \frac{exp(2 \hat{Z}_{ij}) - 1 }{exp(2 \hat{Z}_{ij}) + 1} 
+\end{equation}
+
+We then expand $\hat{R}_{ij}$ as a function of $\hat{Z}_{ij}$ around the population Fisher Z-scores $Z_{ij}$ using the 2nd order Taylor series expansion as follows. 
+
+\begin{align}\label{eq:taylor2}
+ \hat{R}_{ij} & \approx  \frac{exp(2 Z_{ij}) - 1 }{exp(2 Z_{ij}) + 1} + \frac{4 exp(2 Z_{ij})}{exp(2 Z_{ij}) + 1} (\hat{Z}_{ij} - Z_{ij}) +  \frac{4exp(2Z_{ij}){\left (exp(2Z_{ij}) - 1 \right )}}{\left (exp(2Z_{ij}) + 1 \right )^3} (\hat{Z}_{ij} - Z_{ij})^2 \\ 
+& = R_{ij} + (1+R_{ij})(1-R_{ij})  (\hat{Z}_{ij} - Z_{ij}) + R_{ij} (1+R_{ij})(1-R_{ij}) (\hat{Z}_{ij} - Z_{ij})^2
+\end{align}
+
+Using the fact that $E(\hat{Z}_{ij} | R_{ij} ) = E(\hat{Z}_{ij} | Z_{ij})  = Z_{ij}$, we get from Equation \ref {eq:taylor2}
+
+\begin{equation}\label{eq:E_R}
+    E(\hat{R}_{ij}) \approx R_{ij} + R_{ij} (1 - R^2_{ij}) E (\hat{Z}_{ij} - Z_{ij})^2 = R_{ij} + R_{ij} (1 - R^2_{ij}) \eta^2_{ij} 
+\end{equation}
+
+and 
+
+\begin{equation}\label{eq:V_R}
+    var (\hat{R}_{ij}) \approx (1+R_{ij})^2(1 - R_{ij})^2 \eta^2 (n_{ij}) + Cn^{-4}_{ij} \approx (1- R^2_{ij})^2 \eta^2 (n_{ij})
+\end{equation}
+
+since $Cn^{-4}_{ij}$ is negligible as per the condition of Lemma \ref{lemma2}. 
+
+We move from the space of correlations to covariances. From Equation \ref{eq:E_R} we get 
+
+\begin{equation}\label{eq:E_Sigma}
+    E(\hat{\Sigma}_{ij}) \approx  R_{ij}d_{i}d_{j} + R_{ij}d_{i}d_{j} (1 - R^2_{ij}) E (\hat{Z}_{ij} - Z_{ij})^2 = \Sigma_{ij} + \Sigma_{ij} (1 - R^2_{ij}) \eta^2_{ij} 
+\end{equation}
+
+\begin{equation}\label{eq:V_Sigma}
+    V(\hat{\Sigma}_{ij}) \approx  (1- R^2_{ij})^2 d_i d_j \eta^2 (n_{ij})
+\end{equation}
+
+
+
+
+
+\subsection{Proof of Lemmma \ref{lemma3}}
+
+Using Equation \ref{eq:defineLtildeS}, for any two arbitrary covariance matrices $\Sigma_1$ and $\Sigma_2$ matrices,
+
+\begin{equation}\label{eq:Ltildebound}
+    \nabla \tilde{L} (\Sigma_1) - \nabla \tilde{L} (\Sigma_2) = \mathcal{M} \bigodot (\Sigma_1 - \Sigma_2) 
+\end{equation}
+
+where $\bigodot$ denotes element wise product and 
+
+\begin{equation}\label{eq:Mdef}
+    \mathcal{M}_{ij} := \frac{2}{(1+\hat{R}_{ij})(1-\hat{R}_{ij})Q(n_{ij})S_{ii}S_{jj}} \hspace{1 cm} \mathcal{M}_{ii} = 0
+\end{equation}
+
+Since $-1 < R_{ij} < 1$ as per the assumption in Lemma \ref{lemma3}, all elements of $M$ are therefore finite and so, $\kappa = max_{ij} |M_{ij}| < \infty $. We can then write
+
+\begin{equation}\label{eq:lipschitzL}
+||  \nabla \tilde{L} (\Sigma_1) - \nabla \tilde{L} (\Sigma_2) || < \kappa || \Sigma_1 - \Sigma_2 || 
+\end{equation}
+
+From the definition of $\mathcal{G}$ in Equation \ref{eq:defG}, we have
+
+\begin{equation}\label{eq:GtoL}
+    \nabla \mathcal{G} (\Sigma) = \nabla \tilde{L} (\Sigma) + \mathcal{I}
+\end{equation}
+
+and so, 
+
+\begin{equation}
+    ||  \nabla \mathcal{G} (\Sigma_1) - \nabla \mathcal{G} (\Sigma_2) || = ||  \nabla \tilde{L} (\Sigma_1) - \nabla \tilde{L} (\Sigma_2) || < \kappa || \Sigma_1 - \Sigma_2 ||
+\end{equation}
+
+This proves the Lemma. 
+
+
+\subsection{Proof of Lemmma \ref{lemma4}}
+
+Using the results from \ref{eq:boundcorollary1}, we get
+
+\begin{equation}\label{eq:bound1}
+\Pr \left ( |\hat{R}_{ij} - R_{ij}| <=  C( \hat{R}_{ij}, n_{ij}, 0.001 ) \right) > 0.999 \approx 1
+\end{equation}
+
+where $C( \hat{R}_{ij}, N, \epsilon )$ s as described in Equation \ref{eq:defineCstar}. Similarly, if all entries in the data matrix $X$ were observed, $R^{\star}$ would satisfy
+
+\begin{equation}\label{eq:bound2}
+\Pr \left ( |{R}^{\star}_{ij} - R_{ij}| <=  C( \hat{R}_{ij}, N, 0.001 ) \right) \approx 1
+\end{equation}
+
+Combining Equations \ref{eq:bound1} and \ref{eq:bound2}, we get 
+
+\begin{equation}\label{eq:defineB}
+\Pr \left ( |\hat{R}_{ij} - R^{\star}_{ij}| <= \left \{ C( \hat{R}_{ij}, n_{ij}, 0.001 ) + C( \hat{R}_{ij}, N, 0.001 ) \right \} \right) > 0.999 \approx 1
+\end{equation}
+
+In terms of covariances,
+
+\begin{equation}\label{eq:defineB}
+\Pr \left( |\hat{\Sigma}_{ij} - \Sigma^{\star}_{ij}| \leq \hat{d}_{i} \hat{d}_{j} \left\{ C( \hat{R}_{ij}, n_{ij}, 0.001 ) + C( \hat{R}_{ij}, N, 0.001 ) \right\} + \mathcal{O} \left( max(1/n_i, 1/n_j) \right)\vphantom{\left( \right)} \right) > 0.999 \approx 1
+\end{equation}
+
+Following Equation \ref{eq:defineB}, we treat $\xi^{\star}_{ij} =\hat{d}_{i} \hat{d}_{j} \left \{ C( \hat{R}_{ij}, n_{ij}, 0.001 ) + C(\hat{R}_{ij}, N, 0.001) \right \} $ as a close approximate of the  upper bound on $|\hat{\Sigma}_{ij} - \Sigma^{\star}_{ij}|$ in Equation \ref{eq:opt1}.
+We can then write 
+
+\begin{equation}
+    \begin{aligned}
+    max_{\Sigma^{\star}, | \Sigma^{\star}_{ij} - \hat{\Sigma}_{ij}| \leq \xi^{\star}(\hat{R}_{ij}) + \alpha_{ij}} trace \left ( \Omega R^{\star} \right ) & = 
+    max_{\Delta, |\Delta_{ij}| \leq \xi^{\star}(\hat{\Sigma}_{ij}) + \alpha_{ij}} trace \left ( \Omega\hat{\Sigma} + \Omega \Delta \right )  \\
+    & = trace (\Omega\hat{\Sigma}) + max_{\Delta, |\Delta_{ij}|  \leq  \xi^{\star}(\hat{\Sigma}_{ij}) + \alpha_{ij}} trace \left (\Omega \Delta \right)  \\
+    & = trace (\Omega\hat{\Sigma}) + max_{\Delta, |\Delta_{ij}|  \leq  \xi^{\star}(\hat{\Sigma}_{ij}) + \alpha_{ij}} \sum_{ij} \Omega_{ij} \Delta_{ji} \\
+    & = trace (\Omega\hat{R}) + \sum_{ij} |\Omega_{ij}| |\xi^{\star}(\hat{\Sigma}_{ij}) + \alpha_{ij}| \\
+    \end{aligned}
+\end{equation}
+
+Thus the optimization problem in \ref{eq:opt1} reduces to 
+
+\begin{equation}\label{eq:opt2supp}
+    \begin{aligned}
+    \min_{\Omega} ~~ & - \log det \left ( \Omega \right ) + trace (\Omega \hat{R}) +  \sum_{i}\sum_{j} (\lambda + |\xi^{\star}(\hat{\Sigma}_{ij}) + \alpha_{ij}|)|\Omega_{ij}|  \\
+     & \hat{R}_{ij}= \text{pairwise sample correlation}
+    \end{aligned}
+\end{equation}
+
+which proves the Lemma. 
+
+\newpage 
+\newpage
+\clearpage
+

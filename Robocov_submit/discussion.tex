@@ -1,0 +1,34 @@
+\section{Discussion}\label{sec:discussion}
+
+Here we present \Robocov{}---a novel convex optimization-based framework for sparse estimation of covariance (correlation) and inverse covariance (partial correlation) matrix, given a data matrix with missing entries. Our approach does not rely on missing data imputation and hence mitigates the possible shortcomings of a sub-optimal imputation procedure (e.g., based on a low-rank assumption). Instead, \Robocov{} directly estimates the correlation or partial correlation matrix of interest via a regularized loss minimization framework. Although here we focus our analysis on gene expression analysis, \Robocov{} is a stand-alone generic tool that can be applied to any data with missing entries.
+%when the data matrix contains missing entries and does not allow a low rank representation to enable accurate imputation. 
+
+We have assessed the significance of our proposed \Robocov{} framework over standard methods from a methodological, biological and disease analysis perspective. \Robocov{} leads to sparse estimates and has a lower false positive rate compared to other competing methods. \Robocov{} estimator is visually less cluttered and captures more robust biological signal. In terms of disease informativeness, \Robospan{} and \pRobospan{} gene sets, generated from the \Robocov{} estimated correlation and partial correlation matrices, perform considerably better than the analogous \Corspan{} gene set defined from standard correlation estimator.  
+
+%\Robocov{} also provides better disease signal than the standard approach --- \Robospan{} and \pRobospan{} gene sets are more informative for blood and autoimmune traits over \Corspan{} gene set. 
+
+%Our method has several limitations that can motivate future research directions. First, \Robocov{} assumes that all missing entries in the data matrix are missing at random. 
+There are several directions for future research. One such direction would be to incorporate covariate information underlying structured missing-ness to inform \Robocov{} estimators. For GTEx data, donor metadata such as cause of death, age, gender etc can serve as important covariates.  Second, we are interested in modifying \Robocov{} to learn shared correlation structure between gene expression and other genetic and epigenomic data such as transcript level expression, ATAc-seq data etc. Third, from application standpoint, \Robocov{} can also be used as an ingredient in item response models for large scale participant data that may contain extensive amount of missing entries, as in UK Biobank  \cite{Sulis2017, Bauermeister2019}.
+
+\section*{URLs}
+\small
+\begin{itemize}
+    \item \Robocov{} software \\
+    \url{https://github.com/kkdey/Robocov}
+    \item GTEx v6 data analysis, gene list,
+    pathway enrichment results, gene sets,
+    annotations\\
+    \url{https://github.com/kkdey/Robocov-pages}
+    \item Baseline-LD annotations:\\ 
+    \url{https://data.broadinstitute.org/alkesgroup/LDSCORE/}
+    \item Summary statistics:\\ 
+    \url{https://data.broadinstitute.org/alkesgroup/sumstats_formatted/}
+\end{itemize}
+
+\normalsize
+\section*{Acknowledgements}
+
+We thank Alkes L. Price, Bryce van de Geijn and Rajarshi Mukherjee for helpful comments. Rahul Mazumder was partially supported by 
+the Office of Naval Research ONR-N000141512342, ONR-N000141812298 (Young Investigator Award), the National Science Foundation (NSF-IIS-1718258) and IBM.
+
+

@@ -1,0 +1,89 @@
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: main.aux
+The style file: unsrt.bst
+I found no \bibdata command---while reading file main.aux
+Warning--I didn't find a database entry for "gtex2015"
+Warning--I didn't find a database entry for "gtex2017"
+Warning--I didn't find a database entry for "dey2017"
+Warning--I didn't find a database entry for "aguet2019"
+Warning--I didn't find a database entry for "dey2019"
+Warning--I didn't find a database entry for "mazumder2010spectral"
+Warning--I didn't find a database entry for "mazumder2015"
+Warning--I didn't find a database entry for "ledoit2003improved"
+Warning--I didn't find a database entry for "schafer2005shrinkage"
+Warning--I didn't find a database entry for "friedman2008"
+Warning--I didn't find a database entry for "cai2011"
+Warning--I didn't find a database entry for "stephens2016"
+Warning--I didn't find a database entry for "Dempster1977"
+Warning--I didn't find a database entry for "ben2009robust"
+Warning--I didn't find a database entry for "bertsimas2011theory"
+Warning--I didn't find a database entry for "BV2004"
+Warning--I didn't find a database entry for "hastie2015statistical"
+Warning--I didn't find a database entry for "o2016conic"
+Warning--I didn't find a database entry for "Boyd2004"
+Warning--I didn't find a database entry for "Fu2017"
+Warning--I didn't find a database entry for "fisher1915"
+Warning--I didn't find a database entry for "fisher1921"
+Warning--I didn't find a database entry for "rothman2012"
+Warning--I didn't find a database entry for "schafer2004empirical"
+Warning--I didn't find a database entry for "eisenberg2013"
+Warning--I didn't find a database entry for "Lek2016"
+Warning--I didn't find a database entry for "cassa2017"
+Warning--I didn't find a database entry for "Kamburov2012"
+Warning--I didn't find a database entry for "Finucane2018"
+Warning--I didn't find a database entry for "1000G2015"
+Warning--I didn't find a database entry for "Finucane2015"
+Warning--I didn't find a database entry for "Kim2019"
+Warning--I didn't find a database entry for "deLeeuw2015"
+Warning--I didn't find a database entry for "gazal2017"
+Warning--I didn't find a database entry for "Hormozdiari2018"
+Warning--I didn't find a database entry for "Sulis2017"
+Warning--I didn't find a database entry for "Bauermeister2019"
+Warning--I didn't find a database entry for "Bycroft2018"
+Warning--I didn't find a database entry for "jostins2012"
+Warning--I didn't find a database entry for "okada2014"
+Warning--I didn't find a database entry for "Dubois2010"
+Warning--I didn't find a database entry for "Bentham2015"
+You've used 0 entries,
+            1791 wiz_defined-function locations,
+            503 strings with 4159 characters,
+and the built_in function-call counts, 18 in all, are:
+= -- 0
+> -- 0
+< -- 0
++ -- 0
+- -- 0
+* -- 2
+:= -- 7
+add.period$ -- 0
+call.type$ -- 0
+change.case$ -- 0
+chr.to.int$ -- 0
+cite$ -- 0
+duplicate$ -- 0
+empty$ -- 1
+format.name$ -- 0
+if$ -- 1
+int.to.chr$ -- 0
+int.to.str$ -- 0
+missing$ -- 0
+newline$ -- 3
+num.names$ -- 0
+pop$ -- 0
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 1
+stack$ -- 0
+substring$ -- 0
+swap$ -- 0
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 0
+width$ -- 0
+write$ -- 2
+(There was 1 error message)

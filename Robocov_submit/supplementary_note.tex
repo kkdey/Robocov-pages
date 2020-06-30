@@ -1,0 +1,464 @@
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\newpage
+
+\section*{Supplementary Note}
+
+\subsection*{Fisher Z-score}
+The population Fisher Z-score\cite{fisher1915} is defined as 
+\begin{equation}\label{eq:popzsc}
+Z_{ij} = \frac{1}{2} \log \left [  \frac{1 + R_{ij}}{1 - R_{ij}}  \right ]
+\end{equation}
+where $R$ is the population correlation matrix. The corresponding empirical Fisher Z-score is defined as follows 
+\begin{equation}\label{eq:empzsc}
+\hat{Z}_{ij} = \frac{1}{2} \log \left [  \frac{1 + \hat{R}_{ij}}{1 - \hat{R}_{ij}}  \right ]
+\end{equation}
+
+For bivariate normally distributed random variables $X_i$ and $X_j$, the empirical Fisher Z-score $\hat{Z}_{ij}$ (based on $n_{ij}$-many samples) 
+is normally distributed given the population counterpart $Z_{ij}$~\cite{fisher1921}:
+\begin{equation}\label{eq:normalzsc}
+\hat{Z}_{ij} | Z_{ij} \sim N \left  (   Z_{ij}, \frac{1}{n_{ij} - 1} + \frac{2}{(n_{ij} - 1)^2}  \right );
+\end{equation}
+and the Z-scores are conditionally independent. 
+Dey and Stephens \citep{dey2019} assume an adaptive shrinkage prior on the population Fisher Z-scores for each pair of variables. Here we use property~\eqref{eq:normalzsc} in the context of directly estimating $\Sigma$ or $\Omega$ with an $\ell_{1}$-norm penalty. 
+
+\subsection*{Derivation of C}
+
+Here we show how we derive the analytical form of the upper bound $C$ in~\eqref{eq:defineC} appearing in Problem~\eqref{eq:opt1-RM}. 
+%For this derivation, we propose the following Lemma with a Corollary. 
+
+\begin{lemma}\label{lemma1}
+Let $X^f_{N \times P}$ be the fully observed version of the data matrix $X$; and let 
+%Let $\Sigma_{P \times P}$ be the covariance matrix of a data matrix $X^f_{N \times P}$ with missing entries and suppose 
+every sample $X^f_{n,\star}$ follow a Multivariate Gaussian distribution with covariance matrix $\Sigma$ and correlation matrix $R$. The samples are independent. Then, for any fixed $\epsilon > 0$ and for sufficiently large $n_{ij}$, there exists a $C^{'}_{ij} (\epsilon)$ such that 
+\begin{equation}
+    \Pr \left (|\hat{R}_{ij} - R_{ij} | \leq C^{'}_{ij} (\epsilon) \bigg |  R_{ij} \right ) > (1 - \epsilon)
+\end{equation}
+
+where
+
+\begin{equation}\label{eq:defineCstar}
+    C^{'}_{ij} (\epsilon) := \min \left (2,  \eta (n_{ij}) M(\epsilon) \left \{  (1 - \hat{R}^2_{ij}) + \frac{2 M (\epsilon)}{3 \sqrt{3}} \eta (n_{ij}) \right \} \right ) ~~~~\forall i \neq j
+\end{equation}
+
+and
+
+\begin{equation}\label{eq:eta}
+    \eta(n_{ij}) := \sqrt{\frac{1}{n_{ij} - 1} + \frac{2}{(n_{ij} - 1)^2}}
+\end{equation}
+
+and $M(\epsilon)$ is a sufficiently large finite number.
+
+\end{lemma}
+
+\begin{corollary}\label{corollary1}
+
+For $\epsilon = 0.001$, $M(\epsilon)$ can be taken to be $3$ in Lemma \ref{lemma1}. Then
+
+\begin{equation}\label{eq:boundcorollary1}
+    \Pr \left (|\hat{R}_{ij} - R_{ij} | <  C^{'}_{ij} \bigg |~R_{ij}  \right )  \approx 1 
+\end{equation}
+
+where 
+
+\begin{equation}\label{eq:definecstar}
+    C^{'}_{ij}  := min \left (2,  \eta (n_{ij}) \left \{ 3 (1 - \hat{R}^2_{ij}) + 2 \sqrt{3} \eta (n_{ij}) \right \} \right ) ~~~~ \forall i \neq j
+\end{equation}
+
+\end{corollary}
+
+If $n_i$ and $n_j$ are sufficiently large, in which case $\hat{\sigma}_{i} \approx \sigma_i$ and $\hat{\sigma}_{j} \approx \sigma_{j}$, then Corollary~1 leads to the following probability inequality for the pairwise sample covariance:
+
+\begin{equation}\label{eq:boundcorollary1Sigma}
+    \Pr \left (|\hat{\Sigma}_{ij} - \Sigma_{ij} | <  C_{ij} \bigg |~  \Sigma_{ij}  \right )  \approx 1 
+\end{equation}
+
+where 
+
+\begin{equation}\label{eq:definec2}
+    C_{ij}  := \hat{\sigma}_{i}\hat{\sigma}_{j} C^{'}_{ij}.
+\end{equation}
+
+\subsubsection*{Proof of Lemma \ref{lemma1} and Corollary \ref{corollary1}}
+
+If a random variable $W \sim N \left ( 0, 1 \right) $, then for any small $\epsilon > 0$, we can get a number $M(\epsilon)$ such that 
+
+\begin{equation}\label{eq:eqW}
+    \Pr \big ( |W| < M(\epsilon) \big ) > (1 - \epsilon)
+\end{equation}
+
+Using \eqref{eq:normalzsc} and \eqref{eq:eqW}, we have 
+
+\begin{equation}\label{eq:zM}
+   \Pr \left ( |\hat{Z}_{ij} - Z_{ij} | < M(\epsilon) \eta(n_{ij}) \bigg |~Z_{ij} \right) > \left ( 1 - \epsilon \right).
+\end{equation}
+
+The estimated and population correlations $\hat{R}_{ij}$ and $R_{ij}$ (respectively) can be written in terms of the Z-scores using \eqref{eq:popzsc} as follows:
+\begin{equation}\label{eq:Rbound}
+    \hat{R}_{ij} =  \frac{\exp(2 \hat{Z}_{ij}) - 1 }{\exp(2 \hat{Z}_{ij}) + 1},~~ \hspace{0.5 cm} R_{ij} = \frac{\exp(2 Z_{ij}) - 1 }{\exp(2 Z_{ij}) + 1}.
+\end{equation}
+
+Applying a Taylor series expansion to $R_{ij}$ as a function of $Z_{ij}$ around $\hat{Z}_{ij}$, we get:
+\begin{align}
+    \frac{\exp(2 Z_{ij}) - 1 }{\exp(2 Z_{ij}) + 1}  ~~~=~~~&  \frac{\exp(2 \hat{Z}_{ij}) - 1 }{\exp(2 \hat{Z}_{ij}) + 1} ~~+~~ 4 \frac{\exp(2 \hat{Z}_{ij})}{\exp(2 \hat{Z}_{ij}) + 1} (\hat{Z}_{ij} - Z_{ij}) \nonumber \\
+    & + 4 \frac{\exp(2\xi){\left (\exp(2\xi) - 1 \right )}}{\left (\exp(2\xi) + 1 \right )^3} (\hat{Z}_{ij} - Z_{ij})^2 \label{eq:taylor}
+    \end{align}
+where $\xi$ is a value between $Z_{ij}$ and $\hat{Z}_{ij}$. We can place an upper bound on the coefficient of the last term in~\eqref{eq:taylor}:
+
+\begin{equation}\label{eq:2derivbound}
+\left |\frac{\exp(2\xi){\left( \exp(2\xi) - 1 \right)}}{\left (\exp(2\xi) + 1 \right )^3} \right | \leq \frac{1}{6 \sqrt{3}}.
+\end{equation}
+
+\smallskip
+
+
+Using Equations \eqref{eq:Rbound}, \eqref{eq:taylor} and \eqref{eq:2derivbound}, we can write
+
+\begin{equation}\label{eq:boxbound}
+\begin{aligned}
+| \hat{R}_{ij} - R_{ij} |  \leq& 4 \frac{\exp(2 \hat{Z}_{ij})}{(\exp(2 \hat{Z}_{ij}) + 1)^2} | \hat{Z}_{ij} - Z_{ij} | \\
+& + \frac{2}{3\sqrt{3}} | \hat{Z}_{ij} - Z_{ij} |^2
+\end{aligned}
+\end{equation}
+
+Using the definition of $\hat{Z}_{ij}$ in Equation \eqref{eq:empzsc}, we get
+
+\begin{equation}
+    \frac{\exp(2 \hat{Z}_{ij})}{(\exp(2 \hat{Z}_{ij}) + 1)^2} = \frac{(1 - \hat{R}^2_{ij})}{4}. 
+\end{equation}
+
+Using the above expression in~\eqref{eq:boxbound}, we get: 
+
+\begin{equation}\label{eq:boxbound2}
+| \hat{R}_{ij} - R_{ij} |  \leq (1 - \hat{R}^2_{ij}) | \hat{Z}_{ij} - Z_{ij} | + \frac{2}{3\sqrt{3}} | \hat{Z}_{ij} - Z_{ij} |^2
+\end{equation}
+
+
+Using~\eqref{eq:zM} and~\eqref{eq:boxbound2}, we have:
+\begin{equation*}
+\begin{aligned}
+    &\Pr \left (  | \hat{R}_{ij} - R_{ij} | < (1 - \hat{R}^2_{ij})M(\epsilon)\eta(n_{ij}) +\frac{2}{3\sqrt{3}} M^2(\epsilon)\eta^2(n_{ij}) \bigg |~R_{ij} \right )\\
+    & > (1 - \epsilon).
+    \end{aligned}
+\end{equation*}
+
+Since, $\hat{R}_{ij}$ and $R_{ij}$ are both correlation terms, they lie between $-1$ and $+1$ and hence with probability one:
+\begin{equation}\label{eq:naturalboxbound}
+| \hat{R}_{ij} - R_{ij} |  \leq 2
+\end{equation}
+
+Combining Equations \eqref{eq:boxbound2} and \eqref{eq:naturalboxbound}, we get 
+
+\begin{equation}\label{eq:boxbound3}
+\begin{aligned}
+    \Pr \left (  | \hat{R}_{ij} - R_{ij} | < \min \left \{ 2, B\right \} \bigg |~R_{ij} \right ) 
+    > (1 - \epsilon) 
+\end{aligned}
+\end{equation}
+where, 
+$$B = (1 - \hat{R}^2_{ij})M(\epsilon)\eta (n_{ij}) + \frac{2}{3\sqrt{3}} M^2(\epsilon)\eta^2 (n_{ij})$$
+which completes the proof of Lemma~\ref{lemma1}.
+
+In~\eqref{eq:eqW}, if we choose $\epsilon = 0.001$, we have $M(\epsilon) \approx 3$---hence,~\eqref{eq:boxbound3} leads to:
+\begin{align}
+    & \Pr \left (  | \hat{R}_{ij} - R_{ij} | < \min \left \{ 2, 3 (1 - \hat{R}^2_{ij})\eta(n_{ij}) + 2 \sqrt{3}\eta^2(n_{ij}) \right \} \bigg |~ R_{ij} \right )  \nonumber \\
+    &> (1 - \epsilon)~~~~~~~~~~~ \label{eq:boxbound4}
+    \end{align}
+which proves Corollary \ref{corollary1}. Usually this result holds good~\cite{fisher1921} for any $n_{ij} > 3$. If however $n_{ij} \rightarrow \infty$ for all $(i,j)$ pairs, then the bound on $| \hat{R}_{ij} - R_{ij} |$ in~\eqref{eq:boxbound3} approaches 0 and $\hat{R}_{ij}$ would be close to $R_{ij}$.
+
+
+
+\begin{comment}
+\subsection*{Robocov correlation estimator using slack variables}
+
+We propose a slightly more flexible alternative to \Robocov{} correlation estimator using slack variables. In practice, however, we have not observed performance gains using this slack-ier version. The optimization problem in this case is of the following form. 
+
+\begin{equation*}\label{eq:robocov_slack}
+ \begin{aligned}
+    & \text{min} 
+    &&  \sum_{i<j} \mathcal{L}(R_{ij}) + \tau \sum_{i < j} |\alpha_{ij} | \\
+    & \text{where} 
+    && \Sigma \geq 0 \\
+    &&& | \hat{R}_{ij} - R_{ij} |  \leq  C^{\star}_{ij} + \alpha_{ij} ~~~ \forall i,j = 1, 2, \cdots, P  \\
+    &&& C^{\star}_{ij} = min \left (2,  \eta (n_{ij}) \left \{ 3 (1 - \hat{R}^2_{ij}) + 2 \sqrt{3} \eta^2 (n_{ij}) \right \} \right ) \\
+    &&& \hat{R}_{ij}= \text{pairwise sample correlation} \\
+    &&& \eta(n_{ij}) = \sqrt{\frac{1}{n_{ij} - 1} + \frac{2}{(n_{ij} - 1)^2}} \\\
+ \end{aligned}
+\end{equation*}
+\end{comment}
+
+
+\subsection*{A General Likelihood Framework for \Robocov{} Covariance Matrix Estimation}
+
+We propose a generalization of the \Robocov{} covariance matrix estimation framework presented in Section~\ref{sec:cov-estimator} -- the loss function presented here is directly motivated by the Fisher's Z-score framework discussed above, but differs from that appearing in Section~\ref{sec:cov-estimator}.  
+%optimization framework for covariance matrix estimation in~\eqref{eq:opt1-RM} is a special case in a more general framework.
+
+Recall that the estimators in Section~\ref{sec:cov-estimator} are special cases of the following regularized loss minimization framework:
+\begin{align}\label{eq:opt1-general-RM}
+ \begin{aligned}
+    \min_{\Sigma \succeq 0} ~~ \mathcal{L} (\Sigma) + \lambda \xi(\Sigma) \\
+\end{aligned}
+\end{align}
+where $\mathcal{L}$ is the data fidelity function and $\xi$ is the penalty function. 
+and $\lambda$ is a tuning parameter that controls the trade-off between data-fidelity and regularization. We can choose ${\mathcal L}(\Sigma; \hat{\Sigma}) = \sum_{ij} {\mathcal L}_{ij}(\Sigma_{ij}, \hat{\Sigma}_{ij})$ with 
+${\mathcal L}_{ij}(\Sigma_{ij}, \hat{\Sigma}_{ij})= \max \{| \hat{\Sigma}_{ij} - \Sigma_{ij} |  -  C_{ij}, 0\}$ for all $i,j$.
+This leads to a regularized convex optimization problem of the form:
+\begin{equation}\label{eq:opt1-RM-Gen1}
+    \begin{aligned}\min~~ \frac{1}{\lambda}{\mathcal L}(\Sigma; \hat{\Sigma}) +  \sum_{i<j} |\Sigma_{ij}|.
+    \end{aligned}
+\end{equation}
+In the limiting case, $\lambda\rightarrow 0+$ i.e., $1/\lambda \rightarrow \infty$, estimator obtained from Problem~\eqref{eq:opt1-RM-Gen1} will reduce to the estimator available from~\eqref{eq:opt1-RM}. This is because, for sufficiently large values of $1/\lambda$, 
+an optimal solution to~\eqref{eq:opt1-RM-Gen1} will lead to a zero loss---${\mathcal L}(\Sigma; \hat{\Sigma}) = 0$ which implies that 
+${\mathcal L}_{ij}(\Sigma_{ij}; \hat{\Sigma}_{ij}) = 0$ for all $i,j$ --- these are the data-fidelity constraints in~\eqref{eq:opt1-RM}.
+We note that in our numerical experiments, estimator~\eqref{eq:opt1-RM} had a performance which was roughly similar to that of the general estimator~\eqref{eq:opt1-RM-Gen1}.
+
+
+\subsection*{A quadratic loss alternative to covariance estimation problem}
+
+
+%In Section~\ref{sec:cov-estimator}, we consider an $\ell_{1}$-penalty on the entries of $\Sigma$ --- i.e., $\xi(\Sigma) = \sum_{ij} |\Sigma_{ij}|$.
+
+
+We present below (See~\eqref{eq:defineL2}) a convex quadratic loss function $\mathcal{L}(\Sigma)$. While this differs from the loss function considered in~\eqref{eq:opt1-RM}, in practice, the performances of these two estimators were found to be similar (at least on the datasets we experimented on). 
+
+To derive the loss function, we make use of Lemma~\ref{lemma3} --- which presents the (conditional) mean and variance of $\hat{R}_{ij}$ (given $R_{ij}$). This leads to a loss function of the form:
+$$\sum_{ij} \frac{(\hat{R}_{ij} - E (\hat{R}_{ij}| R_{ij}))^2}{\text{var}(\hat{R}_{ij}|R_{ij})}$$ 
+Using the expressions for conditional mean/variances from Lemma~\ref{lemma3} (see below), in the above expression, we get:
+$$\sum_{ij} {\left(\hat{R}_{ij} - \left (R_{ij} + R_{ij} (1 - R^2_{ij}) \eta^2 (n_{ij}) \right) \right)^2}/{((1 - R^2_{ij})^2 \eta^2 (n_{ij}))}.$$ 
+
+%an $\xi$ using quadratic data fidelity function, which in practice, performs equivalently well with the the framework in~\eqref{eq:opt1-RM}. 
+%%%\subsection*{Quadratic Data Fidelity for Robocov Covariance Estimator}
+%%Another alternative to \Robocov{} correlation estimator in~\eqref{eq:opt1-RM} is obtained by 
+%We present a loss function $\mathcal L$ obtained by using a Taylor series approximation of the Fisher Z score.
+%%%We define the data fidelity function $\mathcal{L}$ in the general optimization framework~\eqref{eq:opt1-general-RM} as follows.
+%Our proposed loss function, obtained by using a Taylor series approximation of the Fisher Z score, is given by:
+We set  $\hat{R}_{ij} = \hat{\Sigma}_{ij}/(\hat{\sigma}_{i}\hat{\sigma}_j)$ above, and obtain 
+$$\sum_{ij} \left \{ \frac{\left ( \hat{\sigma}_{i}\hat{\sigma}_{j}R_{ij} + \hat{\sigma}_{i}\hat{\sigma}_{j}R_{ij} (1-{R}^2_{ij})\eta^2(n_{ij}) - \hat{\Sigma}_{ij} \right )}{\hat{\sigma}_{i}\hat{\sigma}_{j} (1-{R}^2_{ij})\eta(n_{ij})} \right \}^2.$$
+The loss function above is a highly nonconvex function in $R_{ij}$ or $\Sigma_{ij}$. To this end, we approximate the above by replacing some unknown population quantities by their sample analogues. This results in a loss function:
+\begin{equation}\label{eq:defineL2}
+\mathcal{L}(\Sigma)= \sum_{ij} \left \{ \frac{\left ( \Sigma_{ij} +  {\Sigma}_{ij} (1-\hat{R}^2_{ij})\eta^2(n_{ij}) - \hat{\Sigma}_{ij} \right )}{\hat{\sigma}_{i}\hat{\sigma}_{j} (1-\hat{R}^2_{ij})\eta(n_{ij})} \right \}^2,
+\end{equation}
+which is convex in $\Sigma$. In words, ${\mathcal L}(\Sigma)$ above, is a measure of how close $\Sigma_{ij}$s are to the pairwise covariance terms $\hat{\Sigma}_{ij}$s---this critically depends upon the number of observed samples $n_{ij}$ for every pair $(i,j)$.
+
+%NB: I changed the loss function slightly to make things consistent. 
+%\begin{equation}\label{eq:defineL2}
+%\mathcal{L}(\Sigma)= \sum_{ij} \left \{ \frac{\left ( \Sigma_{ij} + \hat{\Sigma}_{ij} (1-\hat{R}^2_{ij})\eta^2(n_{ij}) - \hat{\Sigma}_{ij} \right )}{\hat{\sigma}_{i}\hat{\sigma}_{j} (1-\hat{R}^2_{ij})\eta(n_{ij})} \right \}^2,
+%\end{equation}
+%which is convex in $\Sigma$. 
+%and is a convex-approximation of the loss function: 
+%\begin{equation}\label{eq:defineL2tilde}
+%\tilde{\mathcal{L}}(\Sigma):= \sum_{ij} \left \{ \frac{\left ( \Sigma_{ij} + \hat{\sigma}_{i}\hat{\sigma}_{j}\Sigma_{ij} (1+R_{ij})(1-R_{ij})\eta^2(n_{ij}) - \hat{\Sigma}_{ij} \right )}{\hat{\sigma}_{i}\hat{\sigma}_{j}(1+R_{ij})(1-R_{ij})\eta(n_{ij})} \right \}^2
+%\end{equation}
+%The loss functions in~\eqref{eq:defineL2} and~\eqref{eq:defineL2tilde} follow from the derivation in the proof of Lemma 1 presented above. 
+%The squared error loss function in~\eqref{eq:defineL2} is obtain by mean centering and scaling by  E($\hat{\Sigma}_{ij}$) and var($\hat{\Sigma}_{ij}$) where approximate functional form of these quantities can be derived using Taylor theorem, as stated in the lemma below. 
+
+
+%The penalty function $\xi$ from the general framework~\eqref{eq:opt1-general-RM} is defined in this case as
+%\begin{equation}\label{eq:definexi_quadratic}
+%\xi(\Sigma):= \lambda \sum_{ij} |\Sigma_{ij}|
+%\end{equation}
+%Though this method is arguably more flexible than the one proposed in~\eqref{eq:opt1}, in practice, we tend to see very similar performance with the framework in \eqref{eq:opt1-RM} and so, we opted for the latter due to simple interpretability of that model. 
+
+
+We now present Lemma~\ref{lemma3} and its proof:
+\begin{lemma}\label{lemma3}
+Assume that all conditions of Lemma \ref{lemma1} hold. If $n_{ij}$ is large so that $C n^{-4}_{ij}$ is negligible for a constant $C$, we have:
+
+\begin{equation}
+    E \left(\hat{R}_{ij} | R_{ij} \right) \approx R_{ij} + R_{ij} (1 - R^2_{ij}) \eta^2 (n_{ij})
+\end{equation}
+
+and 
+
+\begin{equation}
+    \text{var} \left(\hat{R}_{ij}| R_{ij} \right) \approx  (1 - R^2_{ij})^2 \eta^2 (n_{ij})
+\end{equation}
+
+where $\eta(n_{ij})$ is as described in~\eqref{eq:eta}.
+
+\end{lemma}
+
+
+\subsubsection*{Proof of Lemma \ref{lemma3}}
+
+We re-write $\hat{R}_{ij}$ as a function of the Fisher Z-score
+
+\begin{equation}\label{eq:hatR_to_hatZ}
+    \hat{R}_{ij} = \frac{\exp(2 \hat{Z}_{ij}) - 1 }{\exp(2 \hat{Z}_{ij}) + 1} 
+\end{equation}
+
+We then expand $\hat{R}_{ij}$ as a function of $\hat{Z}_{ij}$ around the population Fisher Z-score $Z_{ij}$ using the 2nd order Taylor series expansion as follows: 
+
+\begin{align}\label{eq:taylor2}
+ \hat{R}_{ij} \approx&  ~~~\frac{\exp(2 Z_{ij}) - 1 }{\exp(2 Z_{ij}) + 1} + \frac{4 \exp(2 Z_{ij})}{\exp(2 Z_{ij}) + 1} (\hat{Z}_{ij} - Z_{ij}) + \nonumber \\ 
+ &~~~~~~~~~~\frac{4\exp(2Z_{ij}){\left (\exp(2Z_{ij}) - 1 \right )}}{\left (\exp(2Z_{ij}) + 1 \right )^3} (\hat{Z}_{ij} - Z_{ij})^2 \nonumber\\ 
+=& R_{ij} + (1-R^2_{ij})  (\hat{Z}_{ij} - Z_{ij}) + R_{ij} (1-R^2_{ij}) (\hat{Z}_{ij} - Z_{ij})^2 
+\end{align}
+
+Using the fact that $E(\hat{Z}_{ij} | R_{ij} ) = E(\hat{Z}_{ij} | Z_{ij})  = Z_{ij}$, we get from~\eqref {eq:taylor2}
+
+\begin{equation}\label{eq:E_R}
+\begin{aligned}
+    E(\hat{R}_{ij} | R_{ij}) \approx& R_{ij} + R_{ij} (1 - R^2_{ij}) 
+    E \left ((\hat{Z}_{ij} - Z_{ij})^2 | R_{ij} \right) \\
+    =& R_{ij} + R_{ij} (1 - R^2_{ij}) \eta^2_{ij} 
+\end{aligned}
+\end{equation}
+
+and 
+
+\begin{equation}\label{eq:V_R}
+\begin{aligned}
+    \text{var} \left(\hat{R}_{ij}| R_{ij}\right) \approx& (1 - R^2_{ij})^2 \eta^2 (n_{ij}) + Cn^{-4}_{ij} \\
+    \approx& (1- R^2_{ij})^2 \eta^2 (n_{ij}),
+    \end{aligned}
+\end{equation}
+where~\eqref{eq:V_R} makes use of the fact that $Cn^{-4}_{ij}$ is negligible as per the condition of Lemma \ref{lemma3}; and the cross (covariance) term vanishes as it is the third moment of a Gaussian with mean zero. 
+
+\subsection*{Derivation of D in~\eqref{eq:defineD}}
+Here we discuss how we derive the analytical form of $D$ in~\eqref{eq:defineD} in the optimization framework in \eqref{eq:opt2-RM}. 
+
+Let $\tilde{\Sigma}$ be the sample covariance matrix of 
+$X^f$ (i.e., the fully observed version of $X$)
+We implicitly assume that the perturbation amount $\Delta$ is such that 
+$\hat{\Sigma} + \Delta$ is a good approximation to the unobserved $\tilde{\Sigma}$.
+%By definition of $\Delta$ in \eqref{eq:opt2-RM} and the use of the Gaussian likelihood in the data fidelity term, we implicitly assume that $\hat{\Sigma} + \Delta$ would be a close approximation to the unobserved sample covariance matrix $\Sigma^{\star}$ had we observed the full data matrix $X^{\star}$ instead of the matrix $X$ with missing entries.
+That is, 
+\begin{equation}\label{eq:Delta_explain}
+   |\Delta_{ij}| \approx | \hat{\Sigma}_{ij} - \tilde{\Sigma}_{ij} | \leq D_{ij}
+\end{equation}
+
+We can write
+
+\begin{equation}\label{eq:Delta_ineq1}
+| \hat{\Sigma}_{ij} - \tilde{\Sigma}_{ij} |  \leq | \hat{\Sigma}_{ij} - \Sigma_{ij} | + |\tilde{\Sigma}_{ij} - \Sigma_{ij} | .
+\end{equation}
+We propose bounds on each of the two terms on the right using our results from the \Robocov{} covariance matrix section. We know that the first term would be bounded by $C_{ij}$ from Corollary 1. Note that $\tilde{\Sigma}_{ij}$ is an instance of 
+$\hat{\Sigma}_{ij}$ when $n_{ij} = N$ --- i.e., all samples are observed. Hence, the bound will be similar to $C_{ij}$ but with $n_{ij}$ replaced by $N$. We therefore define 
+
+\begin{equation}\label{eq:defineQ}
+Q_{ij} := \hat{\sigma}_{i} \hat{\sigma}_{j} \min \left (2,  \eta (N) \left \{ 3 (1 - {\tilde{R}}^2_{ij}) + 2 \sqrt{3} \eta (N) \right \} \right )
+\end{equation}
+where ${\tilde{R}}$ is the correlation matrix corresponding to $\tilde{\Sigma}$. 
+
+When $N$ is reasonably large, $|\eta(N)\tilde{R}^2_{ij} - \eta(N){\hat{R}}^2_{ij}|$ is very small since both $\hat{R}^2_{ij}$ and $\tilde{R}_{ij}^2$ are bounded between $0$ and $1$ and $\eta(N) \rightarrow 0$ as $N \rightarrow \infty$.
+
+Therefore we can effectively replace $Q_{ij}$ by $C^{'}_{ij}$ defined as:
+\begin{equation}\label{eq:defineCtilde}
+C^{'}_{ij} := \hat{\sigma}_{i} \hat{\sigma}_{j} \min \left (2,  \eta (N) \left \{ 3 (1 - \hat{R}^2_{ij}) + 2 \sqrt{3} \eta (N) \right \} \right )
+\end{equation}
+This provides a justification for the choice of $D$ appearing in \eqref{eq:defineD}.
+
+\subsection*{Arriving at the \Robocov{} inverse covariance estimator in Section~\ref{sec:invcov-estimator}}
+
+Note that Problem~\eqref{eq:opt2-RM} involves minimization of a pointwise maximum (over $\Delta$) of convex functions $\Omega \mapsto L(\Omega; \hat{\Sigma} + \Delta) + \lambda \sum_{ij} |\Omega_{ij}|$. 
+Hence, Problem~\eqref{eq:opt2-RM} is convex~\cite{BV2004} in $\Omega$.
+
+Here we explain how the min-max optimization problem in~\eqref{eq:opt2-RM} leads to the optimization problem in~\eqref{eq:opt3-RM}. 
+
+%\begin{equation}
+%    \begin{aligned}
+% \min_{\Omega} \max_{\Delta: |\Delta_{ij}| \leq D_{ij}, \forall i,j } ~~ & \left \{- \log \det \left ( \Omega \right ) + \langle \Omega, \hat{\Sigma} + \Delta \rangle + \alpha \sum_{i,j} |\Omega_{ij}| \right\}\\
+% =\min_{\Omega} \max_{\Delta:~|\Delta_{ij}| \leq D_{ij}, \forall i,j} ~~ & \left \{- \log \det \left ( \Omega \right ) + \langle\Omega, \hat{\Sigma}\rangle + \langle\Omega, \Delta\rangle + \alpha \sum_{i,j} |\Omega_{ij}| \right\} \\ %\hspace{0.3 cm} \langle A, B+C \rangle = \langle A, B \rangle + \langle A, C \rangle \\
+% = \min_{\Omega} ~~ & \left \{- \log det \left ( \Omega \right ) + <\Omega, \hat{\Sigma}> + \alpha \sum_{i}\sum_{j} |\Omega_{ij}| \right \} +   \min_{\Omega} \max_{\Delta, |\Delta| \leq D} <\Omega, \Delta> \\
+% = \min_{\Omega} ~~ & \left \{- \log det \left ( \Omega \right ) + <\Omega, \hat{\Sigma}> + \alpha \sum_{i}\sum_{j} |\Omega_{ij}| \right \} +   \min_{\Omega} \sum_{i}\sum_{j} |D_{ij}| \Omega_{ij}
+% \end{aligned}
+%\end{equation}
+
+
+
+To this end, note that:
+\begin{equation}\label{rob-opt-inner-max}
+    \begin{aligned}
+&\max_{\Delta: |\Delta_{ij}| \leq D_{ij}, \forall i,j } ~~ \left \{- \log \det \left ( \Omega \right ) + \langle \Omega, \hat{\Sigma} + \Delta \rangle  \right\}\\
+ =& \max_{\Delta:~|\Delta_{ij}| \leq D_{ij}, \forall i,j} ~~  \left \{- \log \det \left ( \Omega \right ) + \langle\Omega, \hat{\Sigma}\rangle + \langle\Omega, \Delta\rangle \right\} \\
+ %%\hspace{0.3 cm} (\langle A, B+C \rangle = \langle A, B \rangle + \langle A, C \rangle) \\
+ = & - \log \det \left ( \Omega \right ) + \langle \Omega, \hat{\Sigma} \rangle + \max_{\Delta:~|\Delta_{ij}| \leq D_{ij}, \forall i,j}  \langle \Omega, \Delta  \rangle \\
+ =& - \log \det \left ( \Omega \right ) + \langle \Omega, \hat{\Sigma} \rangle +   \sum_{i,j} D_{ij} |\Omega_{ij}|
+ \end{aligned}
+\end{equation}
+where, the last line follows by noting that 
+$$ \langle \Omega, \Delta  \rangle = \sum_{ij} \Omega_{ij}\Delta_{ij} \leq \sum_{ij} |\Omega_{ij}|\cdot |\Delta_{ij}| \leq \sum_{ij} |\Omega_{ij}| D_{ij}$$
+and an equality above holds when $\Delta_{ij} = \text{sign}(\Omega_{ij}) |D_{ij}|$ for all $i,j$,
+
+Using~\eqref{rob-opt-inner-max}, Problem~\eqref{eq:opt2-RM} becomes:
+\begin{equation*}
+        \begin{aligned}
+\min_{\Omega \succeq 0}~&~ \Big\{~\max_{\substack{\Delta:\\ |\Delta_{ij}| \leq D_{ij}, \forall i,j }} ~~ \left \{- \log \det \left ( \Omega \right ) + \langle \Omega, \hat{\Sigma} + \Delta \rangle  \right\} \\
+& + \lambda \sum_{ij} |\Omega_{ij}| \Big\}\\  
+ = \min_{\Omega \succeq 0} &~ \Big\{ - \log \det \left ( \Omega \right ) + \langle \Omega, \hat{\Sigma} \rangle +   \sum_{i,j} D_{ij} |\Omega_{ij}|  \\
+ & ~~~~~ + \lambda \sum_{ij} |\Omega_{ij}|  \Big\}
+    \end{aligned}
+    \end{equation*}
+    which is the formulation appearing in~\eqref{eq:opt3-RM}.
+
+%%%%The formulation in \eqref{eq:opt3-RM} easily follows from the last step. 
+
+
+
+
+
+
+\subsection*{Simulation settings}
+
+The parameter models for the simulated population models in Figure \ref{fig:sim_results} are as follows.
+
+\begin{itemize}
+    \item \textbf{Hub}: The hub matrix population model for both Figure \ref{fig:sim_results} and Table \ref{tab:tab1} comprised of correlation blocks of size 5. Each block had all off-diagonal entries equal to 0.7.
+    
+    \item \textbf{Toeplitz}: The Toeplitz matrix population model $A$ in Figure \ref{fig:sim_results} had entries of the form $A_{ij} = \max \left \{0, 1 - 0.1*|i-j| \right \}$.
+    
+    \item \textbf{1-band precision}: The 1-band precision matrix population model in Figure \ref{fig:sim_results} is of the form 
+    $A_{i,i+1}=0.5$ an $A_{i,j} = 0$ for $j \neq i, i+1$ for each feature $i$.
+\end{itemize}
+
+
+\subsection*{Performance metrics}
+
+Three performance metrics were used to compare different correlation and partial correlation estimators for different simulation settings (Table \ref{tab:tab1}). They include
+
+\begin{itemize}
+    \item \textbf{FP2 : False Positive 2-norm}: Euclidean distance of the estimated correlation or partial correlation values for feature pairs with population correlation or partial correlation equal to 0.
+    
+    \item \textbf{FPR: False Positive Rate}: The proportion of feature pairs with population correlation (partial correlation) equal to 0 that have estimated correlation (partial correlation) greater than 0.1.
+    
+    \item \textbf{FNR: False Negative Rate}: The proportion of feature pairs with population correlation (partial correlation) greater than 0.1 that have estimated correlation (partial correlation) less than 0.01.
+\end{itemize}
+
+
+\subsection*{Stratified LD-score regression}
+
+Stratified LD score regression (S-LDSC) is a method that assesses the contribution of a genomic annotation to disease and complex trait heritability\cite{ Finucane2015, gazal2017}. S-LDSC assumes that the per-SNP heritability or variance of effect size (of standardized genotype on trait) of each SNP is equal to the linear contribution of each annotation
+
+\begin{equation}\label{eq:varbeta}
+    var \left ( \beta_j \right ) : = \sum_{c} a_{cj} \tau_{c},
+\end{equation}
+
+where $a_{cj}$ is the value of annotation $c$ for SNP $j$, where $a_{cj}$ is binary in our case, and $\tau_{c}$ is the contribution of annotation $c$ to per-SNP heritability conditioned on other annotations. S-LDSC estimates the $\tau_{c}$ for each annotation using the following equation
+
+\begin{equation}\label{eq:chi}
+    E \left [ \chi^2_{j} \right ] = N \sum_{c} l(j, c) \tau_c + 1,
+\end{equation}
+
+where $l(j, c) = \sum_{k} a_{ck} r^2_{jk}$ is the \emph{stratified LD score} of SNP $j$ with respect to annotation $c$ and $r_{jk}$ is the genotypic correlation between SNPs $j$ and $k$ computed using data from 1000 Genomes Project\cite{1000G2015} (see URLs);  N is the GWAS sample size. 
+
+We assess the informativeness of an annotation $c$ using two metrics. The first metric is enrichment ($E_c$), defined as follows (for binary and probabilistic annotations only):
+
+\begin{equation}\label{eq:enrich}
+    E_c = \frac{\frac{h^2_{g} (c)}{h^2_{g}}}{\frac{\sum_{j} a_{cj}}{M}},
+\end{equation}
+
+where $h^2_{g} (c)$ is the heritability explained by the SNPs in annotation $c$, weighted by the annotation values. 
+
+The second metric is standardized effect size ($\tau^{\star}$) defined as follows (for binary, probabilistic, and continuous-valued annotations):
+
+\begin{equation}\label{eq:taustar}
+    \tau^{\star}_{c} = \frac{\tau_c sd_c}{\frac{h^2_{g}}{M}},
+\end{equation}
+
+where $sd_c$ is the standard error of annotation $c$, $h^2_{g}$ the total SNP heritability and $M$ is the total number of SNPs on which this heritability is computed (equal to $5,961,159$ in our analyses). $\tau^{\star}_{c}$ represents the proportionate change in per-SNP heritability associated to a $1$ standard deviation increase in the value of the annotation. 
+
+
+
+

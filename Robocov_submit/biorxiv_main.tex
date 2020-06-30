@@ -1,0 +1,142 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[a4paper, total={6in, 6in}, 
+ top=2in]{geometry}
+\usepackage{longtable}
+\usepackage{comment}
+\usepackage{colortbl}
+\usepackage[table]{xcolor}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage[super,sort]{natbib}
+\usepackage{titling}
+\usepackage{lipsum}
+\usepackage{multirow}
+\usepackage{graphicx,paralist}
+\usepackage[document]{ragged2e}
+\usepackage{amsthm}
+\usepackage{amsmath}
+
+
+
+% use Unicode characters - try changing the option if you run into troubles with special characters (e.g. umlauts)
+\usepackage[utf8]{inputenc}
+\setlength{\parskip}{1em}
+
+% clean citations
+\usepackage[superscript,biblabel,nomove,nospace]{cite}
+
+% hyperref makes references clicky. use \url{www.example.com} or \href{www.example.com}{description} to add a clicky url
+\usepackage{nameref,hyperref}
+
+% line numbers
+\usepackage[right]{lineno}
+
+% improves typesetting in LaTeX
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% text layout - change as needed
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in 
+\textheight 8.75in
+
+% Remove % for double line spacing
+%\usepackage{setspace} 
+%\doublespacing
+
+% use adjustwidth environment to exceed text width (see examples in text)
+\usepackage{changepage}
+
+% adjust caption style
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,singlelinecheck=off]{caption}
+
+% remove brackets from references
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+% headrule, footrule and page numbers
+\usepackage{lastpage,fancyhdr,graphicx}
+\usepackage{epstopdf}
+\pagestyle{myheadings}
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\footrule}{\hrule height 0pt \vspace{2mm}}
+%\fancyheadoffset[L]{2.25in}
+%\fancyfootoffset[L]{2.25in}
+
+% use \textcolor{color}{text} for colored text (e.g. highlight to-do areas)
+\usepackage{color}
+
+% define custom colors (this one is for figure captions)
+\definecolor{Gray}{gray}{.25}
+
+% this is required to include graphics
+\usepackage{graphicx}
+
+% use if you want to put caption to the side of the figure - see example in text
+\usepackage{sidecap}
+
+% use for have text wrap around figures
+\usepackage{wrapfig}
+\usepackage[pscoord]{eso-pic}
+\usepackage[fulladjust]{marginnote}
+\reversemarginpar
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\begin{document}
+\vspace*{0.35in}
+
+%\title{Robust Optimization based tissue-tissue network estimation under missing data and its application in understanding genetic architecture}
+\begin{flushleft}
+{\Large
+\textbf\newline{A convex optimization framework for gene-level tissue network estimation with missing data and its application in understanding disease architecture}
+}
+\newline
+Kushal K. Dey\textsuperscript{1},
+Rahul Mazumder\textsuperscript{2}
+\\
+\bigskip
+\bf{1} \small Department of Epidemiology, Harvard T. H. Chan School of Public Health, Boston, MA
+\\
+\bf{2} \small Sloan School of Management, Operations Research Center and Center for Statistics, MIT, Cambridge, MA
+\end{flushleft}
+\normalsize
+
+\def\CorShrink{\texttt{CorShrink}}
+\def\CorShrinkk{\texttt{CorShrink2}}
+\def\Robocov{\texttt{Robocov}}
+\def\Robospan{\texttt{Robospan}}
+\def\pRobospan{\texttt{pRobospan}}
+\def\Corspan{\texttt{Corspan}}
+
+\justify
+\input{abstract.tex}
+\input{introduction.tex}
+\input{methods.tex}
+\input{results.tex}
+\input{discussion.tex}
+\input{tables.tex}
+\input{figures.tex}
+\input{supplementary_tables.tex}
+\input{supplementary_figures.tex}
+\input{supplementary_note.tex}
+
+\linenumbers
+
+
+\nolinenumbers
+
+%This is where your bibliography is generated. Make sure that your .bib file is actually called library.bib
+\bibliography{refs}
+
+%This defines the bibliographies style. Search online for a list of available styles.
+\bibliographystyle{unsrt}
+%\bibliographystyle{abbrv}
+
+\end{document}

@@ -1,0 +1,243 @@
+---
+title: "S-LDSC results for FD and STSC gene sets"
+author: "Kushal K. Dey and Alkes"
+date: "6/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Here we present S-LDSC results for Corspan, Robospan and pRobospan gene prioritizations.
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(latex2exp)
+require(gridExtra)
+library(xtable)
+scaleFUN <- function(x) sprintf("%.1f", x)
+```
+
+## tau-star
+
+```{r fig.width = 15, fig.height = 12}
+tau1 = c(0.02, 0.11)
+taus1 = c(0.036, 0.03)
+tau2 = c(0.045, 0.12)
+taus2 = c(0.038, 0.03)
+tau3 = c(0.07, 0.081)
+taus3 = c(0.03, 0.03)
+
+annots_pre = c("5kb", "100kb")
+annots = factor(rep(annots_pre, 3), levels = annots_pre)
+
+model = factor(c(rep("FD-Robocov-cor-Cluster3",2), 
+                 rep("FD-Robocov-pcor-Cluster5",2), 
+                 rep("FD-Standard-cor-Cluster5", 2)),
+               levels = c("FD-Standard-cor-Cluster5",
+                          "FD-Robocov-cor-Cluster3",
+                          "FD-Robocov-pcor-Cluster5"))
+
+df = data.frame(tau = c(tau1, tau2, tau3),
+                tau_sd = c(taus1, taus2, taus3),
+                class_annots = model,
+                model = model,
+                annots = annots)
+
+colors2 =  rep("black", 18)
+colors2[1:5] = "gray60"
+colors2[6:10] = "red"
+colors2[11:15] = "blue"
+
+p3 = ggplot(df, aes(x=annots, y=tau, fill=df$model)) +
+  geom_bar(position="dodge", stat="identity", colour = "black", size = 1.3) +
+  geom_errorbar(aes(ymin=tau-1.96*tau_sd, ymax=tau+1.96*tau_sd),
+                width=.5,
+                position = position_dodge(.9)) +
+  guides(fill=guide_legend(title="")) +
+  labs(x = "", y = TeX('$\\tau^ *$')) +
+  theme(axis.title.x = element_text(size=1)) +
+  scale_fill_manual(values=c("gray60", "red", "blue")) +
+  scale_color_manual(values=c("gray60", "red", "blue")) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 30,
+                                   color="black"), legend.position="top") +
+    scale_alpha_continuous(range(0,1), guide = FALSE)  +
+    ggtitle(TeX('$\\tau^ *$, meta-analyzed across 11 blood-related traits')) + 
+    theme(plot.title = element_text(size = 35, face = "bold", hjust = 0.5)) +
+    theme(legend.text=element_text(size=25)) +
+    theme(axis.title.y = element_text(size = 35)) + theme(axis.text.y = element_text(size = 35)) + 
+    theme(panel.background = element_blank(), axis.line = element_line(colour = "black")) 
+p3 
+
+
+```
+
+
+## Enrichments
+
+
+```{r fig.width = 15, fig.height = 12}
+tau1 = c(4.8, 3.5)
+taus1 = c(0.94, 0.29)
+tau2 = c(4.3, 3.2)
+taus2 = c(0.58, 0.21)
+tau3 = c(3.4, 2.4)
+taus3 = c(0.35, 0.16)
+
+annots_pre = c( "5kb", "100kb")
+annots = factor(rep(annots_pre, 3), levels = annots_pre)
+
+model = factor(c(rep("FD-Robocov-cor-Cluster3",2), 
+                 rep("FD-Robocov-pcor-Cluster5",2), 
+                 rep("FD-Standard-cor-Cluster5", 2)),
+               levels = c("FD-Standard-cor-Cluster5",
+                          "FD-Robocov-cor-Cluster3",
+                          "FD-Robocov-pcor-Cluster5"))
+
+df = data.frame(tau = c(tau1, tau2, tau3),
+                tau_sd = c(taus1, taus2, taus3),
+                class_annots = model,
+                model = model,
+                annots = annots)
+
+colors2 =  rep("black", 18)
+colors2[1:5] = "gray60"
+colors2[6:10] = "red"
+colors2[11:15] = "blue"
+
+p3 = ggplot(df, aes(x=annots, y=tau, fill=df$model)) +
+  geom_bar(position="dodge", stat="identity", colour = "black", size = 1.3) +
+  geom_errorbar(aes(ymin=tau-1.96*tau_sd, ymax=tau+1.96*tau_sd),
+                width=.5,
+                position = position_dodge(.9)) +
+  guides(fill=guide_legend(title="")) +
+  labs(x = "", y = TeX('Enrichment')) +
+  theme(axis.title.x = element_text(size=1)) +
+  scale_fill_manual(values=c("gray60", "red", "blue")) +
+  scale_color_manual(values=c("gray60", "red", "blue")) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 30,
+                                   color="black"), legend.position="top") +
+    scale_alpha_continuous(range(0,1), guide = FALSE)  +
+    ggtitle(TeX('ENR, meta-analyzed across 11 blood-related traits')) + 
+    theme(plot.title = element_text(size = 35, face = "bold", hjust = 0.5)) +
+    theme(legend.text=element_text(size=25)) +
+    theme(axis.title.y = element_text(size = 35)) + theme(axis.text.y = element_text(size = 35)) + 
+    theme(panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+    geom_hline(yintercept=1,  color = "black", linetype = "dashed")
+p3 
+
+```
+
+
+## tau-star
+
+```{r fig.width = 15, fig.height = 12}
+tau1 = c(0.10, 0.12)
+taus1 = c(0.04, 0.03)
+tau2 = c(0.09, 0.14)
+taus2 = c(0.03, 0.027)
+tau3 = c(0.06, 0.10)
+taus3 = c(0.037, 0.027)
+
+annots_pre = c("5kb", "100kb")
+annots = factor(rep(annots_pre, 3), levels = annots_pre)
+
+model = factor(c(rep("STSC-Robocov-cor-Brain",2), 
+                 rep("STSC-Robocov-pcor-Brain",2), 
+                 rep("STSC-Standard-cor-Brain", 2)),
+               levels = c("STSC-Standard-cor-Brain",
+                          "STSC-Robocov-cor-Brain",
+                          "STSC-Robocov-pcor-Brain"))
+
+df = data.frame(tau = c(tau1, tau2, tau3),
+                tau_sd = c(taus1, taus2, taus3),
+                class_annots = model,
+                model = model,
+                annots = annots)
+
+colors2 =  rep("black", 18)
+colors2[1:5] = "gray60"
+colors2[6:10] = "red"
+colors2[11:15] = "blue"
+
+p3 = ggplot(df, aes(x=annots, y=tau, fill=df$model)) +
+  geom_bar(position="dodge", stat="identity", colour = "black", size = 1.3) +
+  geom_errorbar(aes(ymin=tau-1.96*tau_sd, ymax=tau+1.96*tau_sd),
+                width=.5,
+                position = position_dodge(.9)) +
+  guides(fill=guide_legend(title="")) +
+  labs(x = "", y = TeX('$\\tau^ *$')) +
+  theme(axis.title.x = element_text(size=1)) +
+  scale_fill_manual(values=c("gray60", "red", "blue")) +
+  scale_color_manual(values=c("gray60", "red", "blue")) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 30,
+                                   color="black"), legend.position="top") +
+    scale_alpha_continuous(range(0,1), guide = FALSE)  +
+    ggtitle(TeX('$\\tau^ *$, meta-analyzed across 11 blood-related traits')) + 
+    theme(plot.title = element_text(size = 35, face = "bold", hjust = 0.5)) +
+    theme(legend.text=element_text(size=25)) +
+    theme(axis.title.y = element_text(size = 35)) + theme(axis.text.y = element_text(size = 35)) + 
+    theme(panel.background = element_blank(), axis.line = element_line(colour = "black")) 
+p3 
+
+
+```
+
+
+## Enrichments
+
+
+```{r fig.width = 15, fig.height = 12}
+tau1 = c(4.8, 3)
+taus1 = c(0.59, 0.22)
+tau2 = c(4.5, 3.1)
+taus2 = c(0.5, 0.2)
+tau3 = c(3.9, 3)
+taus3 = c(0.46, 0.17)
+
+annots_pre = c( "5kb", "100kb")
+annots = factor(rep(annots_pre, 3), levels = annots_pre)
+
+model = factor(c(rep("STSC-Robocov-cor-Brain",2), 
+                 rep("STSC-Robocov-pcor-Brain",2), 
+                 rep("STSC-Standard-cor-Brain", 2)),
+               levels = c("STSC-Standard-cor-Brain",
+                          "STSC-Robocov-cor-Brain",
+                          "STSC-Robocov-pcor-Brain"))
+
+
+df = data.frame(tau = c(tau1, tau2, tau3),
+                tau_sd = c(taus1, taus2, taus3),
+                class_annots = model,
+                model = model,
+                annots = annots)
+
+colors2 =  rep("black", 18)
+colors2[1:5] = "gray60"
+colors2[6:10] = "red"
+colors2[11:15] = "blue"
+
+p3 = ggplot(df, aes(x=annots, y=tau, fill=df$model)) +
+  geom_bar(position="dodge", stat="identity", colour = "black", size = 1.3) +
+  geom_errorbar(aes(ymin=tau-1.96*tau_sd, ymax=tau+1.96*tau_sd),
+                width=.5,
+                position = position_dodge(.9)) +
+  guides(fill=guide_legend(title="")) +
+  labs(x = "", y = TeX('Enrichment')) +
+  theme(axis.title.x = element_text(size=1)) +
+  scale_fill_manual(values=c("gray60", "red", "blue")) +
+  scale_color_manual(values=c("gray60", "red", "blue")) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 30,
+                                   color="black"), legend.position="top") +
+    scale_alpha_continuous(range(0,1), guide = FALSE)  +
+    ggtitle(TeX('ENR, meta-analyzed across 11 blood-related traits')) + 
+    theme(plot.title = element_text(size = 35, face = "bold", hjust = 0.5)) +
+    theme(legend.text=element_text(size=25)) +
+    theme(axis.title.y = element_text(size = 35)) + theme(axis.text.y = element_text(size = 35)) + 
+    theme(panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+    geom_hline(yintercept=1,  color = "black", linetype = "dashed")
+p3 
+
+```

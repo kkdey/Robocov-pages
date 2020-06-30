@@ -323,11 +323,12 @@ div.section {
 </div>
 
 
-<p><strong>Last updated:</strong> 2020-03-08</p>
+<p><strong>Last updated:</strong> 2020-06-09</p>
 <strong>workflowr checks:</strong> <small>(Click a bullet for more information)</small>
 <ul>
 <li>
-<p><details> <summary> <strong style="color:red;">✖</strong> <strong>R Markdown file:</strong> uncommitted changes </summary> The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p><details> <summary> <strong style="color:blue;">✔</strong> <strong>R Markdown file:</strong> up-to-date </summary></p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </details>
 </li>
 <li>
@@ -346,7 +347,7 @@ div.section {
 </details>
 </li>
 <li>
-<p><details> <summary> <strong style="color:blue;">✔</strong> <strong>Repository version:</strong> <a href="https://github.com/kkdey/Robocov-pages/tree/47185fdc5cac16194da35f905099fe23e38cfd0e" target="_blank">47185fd</a> </summary></p>
+<p><details> <summary> <strong style="color:blue;">✔</strong> <strong>Repository version:</strong> <a href="https://github.com/kkdey/Robocov-pages/tree/62d8724e6628e5e8cc97a317f7f379301e39dd9c" target="_blank">62d8724</a> </summary></p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 <pre><code>
 Ignored files:
@@ -354,89 +355,87 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    docs/.DS_Store
+    Ignored:    docs/figure/.DS_Store
+    Ignored:    docs/figure/pLI_shet_robospan_probospan.Rmd/.DS_Store
     Ignored:    draft/
-    Ignored:    output/output_sparse/
+    Ignored:    output/
 
 Untracked files:
-    Untracked:  .gitignore~
-    Untracked:  analysis/band_prec_robocov.Rmd
-    Untracked:  analysis/blood_corspan_robospan_probospan.Rmd
-    Untracked:  analysis/corspan_robospan_probospan.Rmd
-    Untracked:  analysis/diff_robospan_examples.Rmd
-    Untracked:  analysis/eigenvalues_hub.Rmd
-    Untracked:  analysis/figure2.Rmd
-    Untracked:  analysis/gtex_analysis_robocov_examples.Rmd
-    Untracked:  analysis/gtex_pRobocov_pRobospan.Rmd
-    Untracked:  analysis/gtex_predictive_robocov.Rmd
-    Untracked:  analysis/gtex_rank_imputation.Rmd
-    Untracked:  analysis/gtex_robocov.Rmd
-    Untracked:  analysis/gtex_robocov_ex_robospan.Rmd
-    Untracked:  analysis/housekeeping_PPI_MR_enrichment.Rmd
-    Untracked:  analysis/hub_robocov.Rmd
-    Untracked:  analysis/mean_robocov.Rmd
-    Untracked:  analysis/pLI_shet_robospan_probospan.Rmd
-    Untracked:  analysis/predictive_analytics_gtex.Rmd
-    Untracked:  analysis/robocov_demo.Rmd
-    Untracked:  analysis/robospan_blood_compare.Rmd
-    Untracked:  analysis/robospan_corr.Rmd
-    Untracked:  analysis/summary_correlation_structure.Rmd
-    Untracked:  analysis/supp_figure_simulation.Rmd
-    Untracked:  analysis/toeplitz_robocov.Rmd
-    Untracked:  code/  robocov_sim.R
-    Untracked:  code/FDR_Robospan.R
-    Untracked:  code/Joints_Nov24.R
-    Untracked:  code/Untitled.R
-    Untracked:  code/annot_size.R
-    Untracked:  code/band_prec_ocor_sim.R
-    Untracked:  code/band_prec_pcor_sim.R
-    Untracked:  code/band_prec_sim.R
-    Untracked:  code/band_prec_sim2.R
-    Untracked:  code/bandprec_cor_sim.R
-    Untracked:  code/baseline_strategies.R
-    Untracked:  code/corr_span.R
-    Untracked:  code/correlation_gene_scores.R
-    Untracked:  code/gene_score_all_strategies.R
-    Untracked:  code/gtex_robocov.R
-    Untracked:  code/gtex_robocov_precision.R
-    Untracked:  code/hub_prec_cor_sim.R
-    Untracked:  code/hub_sim.R
-    Untracked:  code/hub_sim2.R
-    Untracked:  code/hub_sim_sparse.R
-    Untracked:  code/joint_robocov_model.R
-    Untracked:  code/joints_robocov.R
-    Untracked:  code/many_tau_star.R
-    Untracked:  code/maxHiCgene.R
-    Untracked:  code/meta_enrich.R
-    Untracked:  code/meta_single_enrich.R
-    Untracked:  code/postprocess_hub_toeplitz.R
-    Untracked:  code/predictive_analytics_hub.R
-    Untracked:  code/predictive_analytics_toeplitz.R
-    Untracked:  code/robocov_gtex.R
-    Untracked:  code/robocov_gtex_blood.R
-    Untracked:  code/robocov_gtex_brain.R
-    Untracked:  code/sim_results.R
-    Untracked:  code/single_tau_star.R
-    Untracked:  code/toeplitz_prec_cor_sim.R
-    Untracked:  code/toeplitz_sim.R
-    Untracked:  code/toeplitz_sim2.R
-    Untracked:  code/toeplitz_sim_sparse.R
-    Untracked:  data/Cor_pairwise_all_genes.rda
-    Untracked:  data/Gene_Scores/
-    Untracked:  data/Robocov_Box_all_genes.rda
-    Untracked:  data/Robocov_Precision_all_genes.rda
-    Untracked:  data/gene_names_GTEX_V6.txt
-    Untracked:  data/housekeeping_genes.txt
-    Untracked:  data/person_tissue_genes_voom.rda
-    Untracked:  docs/figure/
-    Untracked:  sim_code/
-
-Unstaged changes:
-    Modified:   .gitignore
+    Untracked:  Robocov_submit/
+    Untracked:  analysis/covid19_genes_robocov.Rmd
+    Untracked:  code/gtex_process_robocov_input.R
+    Untracked:  data/ACE2_expression.rda
+    Untracked:  data/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct
+    Untracked:  data/GTEx_Analysis_v8_Annotations_SampleAttributesDD.xlsx
+    Untracked:  data/GTEx_data_process.R
+    Untracked:  data/TMPRSS2_expression.rda
+    Untracked:  docs/figure/covid19_genes_robocov.Rmd/
 
 </code></pre>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes. </details>
 </li>
 </ul>
+<details> <summary> <small><strong>Expand here to see past versions:</strong></small> </summary>
+<ul>
+<table style="border-collapse:separate; border-spacing:5px;">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Author
+</th>
+<th style="text-align:left;">
+Date
+</th>
+<th style="text-align:left;">
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Rmd
+</td>
+<td style="text-align:left;">
+<a href="https://github.com/kkdey/Robocov-pages/blob/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/analysis/hub_robocov.Rmd" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+<td style="text-align:left;">
+workflow project
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+html
+</td>
+<td style="text-align:left;">
+<a href="https://cdn.rawgit.com/kkdey/Robocov-pages/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/docs/hub_robocov.html" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+<td style="text-align:left;">
+workflow project
+</td>
+</tr>
+</tbody>
+</table>
+</ul>
+<p></details></p>
 <hr />
 <pre class="r"><code>library(glasso)
 library(corpcor)
@@ -508,6 +507,36 @@ data_missing = t(apply(data, 1, function(x){
          rect.col = &quot;white&quot;,na.label.col = &quot;white&quot;,
          method = &quot;color&quot;, type = &quot;lower&quot;, tl.srt=45)</code></pre>
 <p><img src="figure/hub_robocov.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<details> <summary><em>Expand here to see past versions of unnamed-chunk-4-1.png:</em></summary>
+<table style="border-collapse:separate; border-spacing:5px;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Author
+</th>
+<th style="text-align:left;">
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://github.com/kkdey/Robocov-pages/blob/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/docs/figure/hub_robocov.Rmd/unnamed-chunk-4-1.png" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+</tr>
+</tbody>
+</table>
+<p></details></p>
 </div>
 <div id="p-pop" class="section level2">
 <h2>p-Pop</h2>
@@ -519,6 +548,36 @@ corrplot(pcorSigma,  diag = TRUE,
          rect.col = &quot;white&quot;,na.label.col = &quot;white&quot;,
          method = &quot;color&quot;, type = &quot;lower&quot;, tl.srt=45)</code></pre>
 <p><img src="figure/hub_robocov.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<details> <summary><em>Expand here to see past versions of unnamed-chunk-5-1.png:</em></summary>
+<table style="border-collapse:separate; border-spacing:5px;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Author
+</th>
+<th style="text-align:left;">
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://github.com/kkdey/Robocov-pages/blob/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/docs/figure/hub_robocov.Rmd/unnamed-chunk-5-1.png" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+</tr>
+</tbody>
+</table>
+<p></details></p>
 </div>
 <div id="standard" class="section level2">
 <h2>Standard</h2>
@@ -529,6 +588,36 @@ corrplot(standard_cor,  diag = TRUE,
          rect.col = &quot;white&quot;,na.label.col = &quot;white&quot;,
          method = &quot;color&quot;, type = &quot;lower&quot;, tl.srt=45)</code></pre>
 <p><img src="figure/hub_robocov.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<details> <summary><em>Expand here to see past versions of unnamed-chunk-6-1.png:</em></summary>
+<table style="border-collapse:separate; border-spacing:5px;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Author
+</th>
+<th style="text-align:left;">
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://github.com/kkdey/Robocov-pages/blob/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/docs/figure/hub_robocov.Rmd/unnamed-chunk-6-1.png" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+</tr>
+</tbody>
+</table>
+<p></details></p>
 </div>
 <div id="robocov-box" class="section level2">
 <h2>Robocov-box</h2>
@@ -539,6 +628,36 @@ corrplot(robocov_box_cor,  diag = TRUE,
          rect.col = &quot;white&quot;,na.label.col = &quot;white&quot;,
          method = &quot;color&quot;, type = &quot;lower&quot;, tl.srt=45)</code></pre>
 <p><img src="figure/hub_robocov.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<details> <summary><em>Expand here to see past versions of unnamed-chunk-7-1.png:</em></summary>
+<table style="border-collapse:separate; border-spacing:5px;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Author
+</th>
+<th style="text-align:left;">
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://github.com/kkdey/Robocov-pages/blob/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/docs/figure/hub_robocov.Rmd/unnamed-chunk-7-1.png" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+</tr>
+</tbody>
+</table>
+<p></details></p>
 </div>
 <div id="p-robocov" class="section level2">
 <h2>p-Robocov</h2>
@@ -549,6 +668,36 @@ corrplot(robo_prec,  diag = TRUE,
          rect.col = &quot;white&quot;,na.label.col = &quot;white&quot;,
          method = &quot;color&quot;, type = &quot;lower&quot;, tl.srt=45)</code></pre>
 <p><img src="figure/hub_robocov.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<details> <summary><em>Expand here to see past versions of unnamed-chunk-8-1.png:</em></summary>
+<table style="border-collapse:separate; border-spacing:5px;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Author
+</th>
+<th style="text-align:left;">
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://github.com/kkdey/Robocov-pages/blob/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/docs/figure/hub_robocov.Rmd/unnamed-chunk-8-1.png" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+</tr>
+</tbody>
+</table>
+<p></details></p>
 </div>
 <div id="corshrink" class="section level2">
 <h2>CorShrink</h2>
@@ -561,6 +710,36 @@ corrplot(corshrink_cor,  diag = TRUE,
          rect.col = &quot;white&quot;,na.label.col = &quot;white&quot;,
          method = &quot;color&quot;, type = &quot;lower&quot;, tl.srt=45)</code></pre>
 <p><img src="figure/hub_robocov.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<details> <summary><em>Expand here to see past versions of unnamed-chunk-9-1.png:</em></summary>
+<table style="border-collapse:separate; border-spacing:5px;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Author
+</th>
+<th style="text-align:left;">
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://github.com/kkdey/Robocov-pages/blob/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/docs/figure/hub_robocov.Rmd/unnamed-chunk-9-1.png" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+</tr>
+</tbody>
+</table>
+<p></details></p>
 </div>
 <div id="eigenvalue-trends" class="section level2">
 <h2>Eigenvalue trends</h2>
@@ -570,26 +749,26 @@ eigen(robocov_box_cor)$values[1:NUM], eigen(corshrink_cor)$values[1:NUM])
 colnames(df) = c(&quot;Pop-corr&quot;, &quot;Sample-Corr&quot;, &quot;Robocov-Corr&quot;, &quot;CorShrink&quot;)
 df</code></pre>
 <pre><code>      Pop-corr Sample-Corr Robocov-Corr CorShrink
- [1,]      3.8   4.9599822    3.4957879 3.9868785
- [2,]      3.8   4.3949921    3.4428195 3.8807651
- [3,]      3.8   4.2772006    3.4399380 3.8382392
- [4,]      3.8   4.1410912    3.4356572 3.8303859
- [5,]      3.8   3.9525600    3.4123612 3.8024537
- [6,]      3.8   3.7991829    3.3929858 3.7892236
- [7,]      3.8   3.6004993    3.3717051 3.7656830
- [8,]      3.8   3.4371947    3.3707218 3.7460242
- [9,]      3.8   3.3443081    3.3400652 3.7182821
-[10,]      3.8   2.6993433    3.3162310 3.6210476
-[11,]      0.3   0.6903720    0.5049445 0.4857444
-[12,]      0.3   0.6197120    0.5036696 0.4374085
-[13,]      0.3   0.5568579    0.4941919 0.3962831
-[14,]      0.3   0.5444409    0.4829281 0.3877164
-[15,]      0.3   0.5321457    0.4749053 0.3793558
-[16,]      0.3   0.4996637    0.4740153 0.3703133
-[17,]      0.3   0.4692176    0.4615096 0.3641930
-[18,]      0.3   0.4425604    0.4567511 0.3512011
-[19,]      0.3   0.4390205    0.4503001 0.3483767
-[20,]      0.3   0.4104330    0.4432128 0.3432308</code></pre>
+ [1,]      3.8   4.9599822    3.4505764 3.9868785
+ [2,]      3.8   4.3949921    3.3956104 3.8807651
+ [3,]      3.8   4.2772006    3.3937203 3.8382392
+ [4,]      3.8   4.1410912    3.3881394 3.8303859
+ [5,]      3.8   3.9525600    3.3666735 3.8024537
+ [6,]      3.8   3.7991829    3.3461411 3.7892236
+ [7,]      3.8   3.6004993    3.3251407 3.7656830
+ [8,]      3.8   3.4371947    3.3235700 3.7460242
+ [9,]      3.8   3.3443081    3.2919563 3.7182821
+[10,]      3.8   2.6993433    3.2688721 3.6210476
+[11,]      0.3   0.6903720    0.5181353 0.4857444
+[12,]      0.3   0.6197120    0.5171624 0.4374085
+[13,]      0.3   0.5568579    0.5060451 0.3962831
+[14,]      0.3   0.5444409    0.4955051 0.3877164
+[15,]      0.3   0.5321457    0.4875672 0.3793558
+[16,]      0.3   0.4996637    0.4868871 0.3703133
+[17,]      0.3   0.4692176    0.4740532 0.3641930
+[18,]      0.3   0.4425604    0.4691880 0.3512011
+[19,]      0.3   0.4390205    0.4625575 0.3483767
+[20,]      0.3   0.4104330    0.4555282 0.3432308</code></pre>
 <pre class="r"><code>eigs.df &lt;- data.frame (&quot;x&quot; = rep(1:NUM, 4),
                        &quot;y&quot; = c(df[,1], df[,2], df[,3], df[,4]),
                        &quot;color&quot; = factor(c(rep(&quot;Pop&quot;, NUM), 
@@ -606,31 +785,61 @@ p &lt;- ggplot(eigs.df, aes(x=x, y=y, colour=color, linetype = color)) + geom_li
   theme_bw()
 p</code></pre>
 <p><img src="figure/hub_robocov.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<details> <summary><em>Expand here to see past versions of unnamed-chunk-11-1.png:</em></summary>
+<table style="border-collapse:separate; border-spacing:5px;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Author
+</th>
+<th style="text-align:left;">
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://github.com/kkdey/Robocov-pages/blob/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/docs/figure/hub_robocov.Rmd/unnamed-chunk-11-1.png" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+</tr>
+</tbody>
+</table>
+<p></details></p>
 <pre class="r"><code>NUM=20
 df = cbind(eigen(pcorSigma)$values[1:NUM], eigen(robo_prec)$values[1:NUM])
 colnames(df) = c(&quot;Pop&quot;, &quot;Robocov&quot;)
 df</code></pre>
 <pre><code>            Pop   Robocov
- [1,] 1.9032258 1.7526949
- [2,] 1.9032258 1.7490845
- [3,] 1.9032258 1.7405699
- [4,] 1.9032258 1.7374342
- [5,] 1.9032258 1.7329040
- [6,] 1.9032258 1.7167406
- [7,] 1.9032258 1.7070616
- [8,] 1.9032258 1.7067779
- [9,] 1.9032258 1.7018533
-[10,] 1.9032258 1.7016185
-[11,] 0.7741935 1.0443657
-[12,] 0.7741935 1.0101938
-[13,] 0.7741935 0.9768117
-[14,] 0.7741935 0.9740635
-[15,] 0.7741935 0.9705592
-[16,] 0.7741935 0.9685653
-[17,] 0.7741935 0.9628494
-[18,] 0.7741935 0.9610700
-[19,] 0.7741935 0.9579215
-[20,] 0.7741935 0.9479984</code></pre>
+ [1,] 1.9032258 1.6067485
+ [2,] 1.9032258 1.6022468
+ [3,] 1.9032258 1.5869582
+ [4,] 1.9032258 1.5845083
+ [5,] 1.9032258 1.5749519
+ [6,] 1.9032258 1.5475496
+ [7,] 1.9032258 1.5367772
+ [8,] 1.9032258 1.5338500
+ [9,] 1.9032258 1.5262361
+[10,] 1.9032258 1.5253113
+[11,] 0.7741935 1.0386326
+[12,] 0.7741935 1.0159852
+[13,] 0.7741935 0.9912540
+[14,] 0.7741935 0.9900467
+[15,] 0.7741935 0.9870494
+[16,] 0.7741935 0.9866920
+[17,] 0.7741935 0.9847167
+[18,] 0.7741935 0.9843614
+[19,] 0.7741935 0.9792368
+[20,] 0.7741935 0.9675027</code></pre>
 <pre class="r"><code>eigs.df &lt;- data.frame (&quot;x&quot; = rep(1:NUM, 4),
                        &quot;y&quot; = c(df[,1], df[,2]),
                        &quot;color&quot; = factor(c(rep(&quot;Pop&quot;, NUM),  
@@ -647,6 +856,36 @@ p &lt;- ggplot(eigs.df, aes(x=x, y=y, colour=color, linetype = color)) + geom_li
   theme_bw()
 p</code></pre>
 <p><img src="figure/hub_robocov.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<details> <summary><em>Expand here to see past versions of unnamed-chunk-12-1.png:</em></summary>
+<table style="border-collapse:separate; border-spacing:5px;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Author
+</th>
+<th style="text-align:left;">
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://github.com/kkdey/Robocov-pages/blob/c6c31f2861eca08d5c470f6ec659ae78b32ec2aa/docs/figure/hub_robocov.Rmd/unnamed-chunk-12-1.png" target="_blank">c6c31f2</a>
+</td>
+<td style="text-align:left;">
+Kushal K Dey
+</td>
+<td style="text-align:left;">
+2020-03-08
+</td>
+</tr>
+</tbody>
+</table>
+<p></details></p>
 </div>
 <div id="session-information" class="section level2">
 <h2>Session information</h2>
@@ -666,7 +905,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] ggplot2_3.1.1   corrplot_0.84   CorShrink_0.1-6 Robocov_0.1-6  
+[1] ggplot2_3.3.0   corrplot_0.84   CorShrink_0.1-6 Robocov_0.1-6  
 [5] CVXR_0.99-2     psych_1.8.12    Matrix_1.2-14   corpcor_1.6.9  
 [9] glasso_1.10    
 
@@ -687,12 +926,11 @@ loaded via a namespace (and not attached):
 [40] gridExtra_2.3     mnormt_1.5-5      digest_0.6.19    
 [43] stringi_1.4.3     dplyr_0.8.0.1     grid_3.5.1       
 [46] rprojroot_1.3-2   ECOSolveR_0.4     tools_3.5.1      
-[49] magrittr_1.5      tibble_2.1.1      lazyeval_0.2.2   
-[52] glmnet_2.0-18     pkgconfig_2.0.2   crayon_1.3.4     
-[55] whisker_0.3-2     MASS_7.3-50       SQUAREM_2017.10-1
-[58] assertthat_0.2.1  rmarkdown_1.10    iterators_1.0.10 
-[61] R6_2.4.0          nlme_3.1-137      git2r_0.23.0     
-[64] compiler_3.5.1   </code></pre>
+[49] magrittr_1.5      tibble_2.1.1      glmnet_2.0-18    
+[52] pkgconfig_2.0.2   crayon_1.3.4      whisker_0.3-2    
+[55] MASS_7.3-50       SQUAREM_2017.10-1 assertthat_0.2.1 
+[58] rmarkdown_1.10    iterators_1.0.10  R6_2.4.0         
+[61] nlme_3.1-137      git2r_0.23.0      compiler_3.5.1   </code></pre>
 </div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using

@@ -1,0 +1,56 @@
+---
+title: "Robocov plots for COVID-19 relevant genes"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "4/3/2020"
+output: html_document
+---
+
+```{r warning=F, message=F}
+library(corrplot)
+library(ggplot2)
+```
+
+
+Two most important genes related to COVID-19 are ACE2 (ENSG00000130234) and TMPRSS2 (ENSG00000184012). The Robocov correlation plots for the two genes are as follows.
+
+```{r}
+library(Robocov)
+```
+
+## Load data
+
+We present here three examples of genes that have distinct characteristic patterns of tissue-wide correlations.
+
+## Correlation Matrix
+
+## ACE2 and TMPRSS2
+
+```{r}
+ace2_expression = get(load("/Users/kushaldey/Documents/Robocov-pages/data/ACE2_expression.rda"))
+tmprss2_expression = get(load("/Users/kushaldey/Documents/Robocov-pages/data/TMPRSS2_expression.rda"))
+```
+
+
+```{r}
+temp = Robocov_cor(log(ace2_expression+1), loss = "lasso")
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(temp,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+```{r}
+temp = Robocov_cor(log(tmprss2_expression+1), loss = "lasso")
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(temp,   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```

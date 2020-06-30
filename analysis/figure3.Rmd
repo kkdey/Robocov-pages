@@ -1,0 +1,58 @@
+---
+title: "figure3"
+author: "Kushal K. Dey and Rahul Mazumder"
+date: "6/15/2020"
+output: html_document
+---
+
+```{r warning=F, message=F}
+library(corrplot)
+library(ggplot2)
+```
+
+## Load data
+
+We present here three examples of genes that have distinct characteristic patterns of tissue-wide correlations.
+
+```{r}
+robocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Box_all_genes.rda"))
+probocov_gtex = get(load("/Users/kushaldey/Documents/Robocov-pages/data/Robocov_Precision_all_genes.rda"))
+```
+
+## RPL9
+
+```{r fig.height=8, fig.width=8}
+corrplot(robocov_gtex[,,"ENSG00000163682"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(probocov_gtex[,,"ENSG00000163682"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+## HBB
+
+```{r fig.height=8, fig.width=8}
+corrplot(robocov_gtex[,,"ENSG00000244734"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+```{r fig.height=8, fig.width=8}
+corrplot(probocov_gtex[,,"ENSG00000244734"],   diag = TRUE,
+         col = colorRampPalette(c("lightblue4", "lightblue2", "white", "indianred1", "indianred3"))(200),
+         tl.pos = "ld", tl.cex = 0.6, tl.col = "black",
+         rect.col = "white",na.label.col = "white",
+         method = "color", type = "lower", tl.srt=45)
+```
+
+

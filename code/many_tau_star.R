@@ -4,10 +4,10 @@
 
 library(data.table)
 library(rmeta)
-annot_cell = "/n/groups/price/kushal/Robocov/data/ANNOTATIONS/FigJoints_Feb2020"
-results_cell = "/n/groups/price/kushal/Robocov/data/LDSC_RESULTS/FigJoints_Feb2020/baselineLD_v2.1"
+annot_cell = "/n/groups/price/kushal/Robocov/data/ANNOTATIONS/FigJoints/Joint_Jun15"
+results_cell = "/n/groups/price/kushal/Robocov/data/LDSC_RESULTS/FigJoints/Joint_Jun15/baselineLD_v2.1"
 base_path = "/n/groups/price/kushal/Robocov/data/ANNOTATIONS/Baselines/baselineLD_v2.1"
-annot_names = "FS5"
+annot_names = "FS2"
 
 
 all_traits = c('UKB_460K.body_BMIz','UKB_460K.cov_EDU_YEARS','UKB_460K.lung_FVCzSMOKE','UKB_460K.cov_SMOKING_STATUS',

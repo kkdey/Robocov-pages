@@ -1,7 +1,7 @@
 library(data.table)
 library(rmeta)
-annot_cell = "/n/groups/price/kushal/Robocov/data/ANNOTATIONS/GENE_SCORES/pRobospan_mean"
-results_cell = "/n/groups/price/kushal/Robocov/data/LDSC_RESULTS/GENE_SCORES/pRobospan_mean/baselineLD_v2.1"
+annot_cell = "/n/groups/price/kushal/Robocov/data/ANNOTATIONS/FigJoints/Joint_Jun15"
+results_cell = "/n/groups/price/kushal/Robocov/data/LDSC_RESULTS/FigJoints/Joint_Jun15/baselineLD_v2.1"
 annot_names = list.files(results_cell)
 annot_idx = 1
 

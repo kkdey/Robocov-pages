@@ -1,0 +1,68 @@
+\PassOptionsToPackage{utf8}{inputenc}
+\documentclass{bioinfo}
+\copyrightyear{2020} \pubyear{2020}
+
+\access{Advance Access Publication Date: Day Month Year}
+\appnotes{Manuscript Category}
+
+\usepackage{longtable}
+\usepackage{comment}
+\usepackage{colortbl}
+\usepackage[table]{xcolor}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{lipsum}
+\usepackage{multirow}
+\usepackage{graphicx,paralist}
+\usepackage[document]{ragged2e}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{setspace}
+\usepackage[draft]{hyperref}
+\usepackage{fixltx2e}
+\usepackage{natbib}
+%\usepackage[font=bf]{caption}
+\usepackage{multicol}
+
+\def\CorShrink{\texttt{CorShrink}}
+\def\CorShrinkk{\texttt{CorShrink2}}
+\def\Robocov{\texttt{Robocov}}
+\def\Robospan{\texttt{Robospan}}
+\def\pRobospan{\texttt{pRobospan}}
+\def\Corspan{\texttt{Corspan}}
+
+
+
+\begin{document}
+\firstpage{1}
+
+\subtitle{Subject Section}
+
+\title[a]{A convex optimization framework for gene-level tissue network estimation with missing data and its application in disease architecture}
+\author[Dey \& Mazumder.]{Kushal K. Dey \,$^{\text{\sfb 1,}*}$, Rahul Mazumder \,$^{\text{\sfb 2, }*}$}
+\address{$^{\text{\sf 1}}$Department of Epidemiology, Harvard T. H. Chan School of Public Health, Boston, MA \\
+$^{\text{\sf 2}}$Sloan School of Management, Operations Research Center and Center for Statistics, MIT, Cambridge, MA.}
+
+\corresp{$^\ast$ denotes authors to whom correspondence should be addressed.}
+
+\history{Received on XXXXX; revised on XXXXX; accepted on XXXXX}
+
+\editor{Associate Editor: XXXXXXX}
+
+ 
+\abstract{\textbf{Motivation:} \justifying Genes with correlated expression across individuals in multiple tissues are potentially informative for systemic genetic activity spanning these tissues. In this context, the tissue-level gene expression data across multiple subjects from the Genotype Tissue Expression (GTEx) Project is a valuable analytical resource. Unfortunately, the GTEx data is fraught with missing entries owing to subjects often contributing only a subset of tissues. In such a scenario, standard techniques of correlation matrix estimation with or without data imputation do not perform well. To solve this problem, we propose \Robocov{}, a novel convex optimization-based framework for robustly learning sparse covariance or inverse covariance matrices for missing data problems. \\
+\textbf{Results:} \Robocov{} produces more interpretable visual representation of correlation and causal structure in simulation settings and GTEx data analysis. We also show that \Robocov{} estimators have a lower false positive rate than competing approaches for missing data problems.  Genes prioritized by the average value of \Robocov{} correlations or partial correlations across tissues are enriched for pathways related to systemic activities such as signaling pathways, circadian clock and immune function. SNPs linked to these prioritized genes showed high enrichment and unique information for blood-related traits; in comparison, no disease signal is observed for SNPs characterized analogously using standard correlation estimator.\\
+\textbf{Availability:} \Robocov{} is available as an R package \url{https://github.com/kkdey/Robocov}. \\
+\textbf{Contact:} \href{kdey@hsph.harvard.edu}{kdey@hsph.harvard.edu}\\
+\textbf{Supplementary information:} Supplementary data are available at \textit{Bioinformatics} online.}
+\maketitle
+
+\justifying
+\input{intro_bioinfo}
+\input{methods_bioinfo}
+%\input{results}
+\input{discussion}
+
+
+\end{document}
+

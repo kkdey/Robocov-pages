@@ -1,0 +1,476 @@
+%\PassOptionsToPackage{utf8}{inputenc}
+\documentclass{bioinfo}
+\copyrightyear{2015} \pubyear{2015}
+
+\access{Advance Access Publication Date: Day Month Year}
+\appnotes{Manuscript Category}
+
+\usepackage{longtable}
+\usepackage{comment}
+\usepackage{colortbl}
+\usepackage[table]{xcolor}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{lipsum}
+\usepackage{multirow}
+\usepackage{graphicx,paralist}
+\usepackage[document]{ragged2e}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{setspace}
+\usepackage[draft]{hyperref}
+\usepackage{fixltx2e}
+%\usepackage{natbib}
+%\usepackage[font=bf]{caption}
+%\usepackage{multicol}
+
+ \newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+
+
+
+\def\CorShrink{\texttt{CorShrink}}
+\def\CorShrinkk{\texttt{CorShrink2}}
+\def\Robocov{\texttt{Robocov}}
+\def\Robospan{\texttt{Robospan}}
+\def\pRobospan{\texttt{pRobospan}}
+\def\Corspan{\texttt{Corspan}}
+
+\begin{document}
+\firstpage{1}
+
+\subtitle{Subject Section}
+
+\title[Robocov]{A convex optimization framework for gene-level tissue network estimation with missing data and its application in disease architecture}
+\author[Dey \& Mazumder.]{Kushal K. Dey \,$^{\text{\sfb 1,}*}$, Rahul Mazumder \,$^{\text{\sfb 2, }*}$}
+\address{$^{\text{\sf 1}}$Department of Epidemiology, Harvard T. H. Chan School of Public Health, Boston, MA and \\
+$^{\text{\sf 2}}$Sloan School of Management, Operations Research Center and Center for Statistics, MIT, Cambridge, MA.}
+
+\corresp{$^\ast$ denotes authors to whom correspondence should be addressed.}
+
+\history{Received on XXXXX; revised on XXXXX; accepted on XXXXX}
+
+\editor{Associate Editor: XXXXXXX}
+
+ 
+\abstract{\textbf{Motivation:} \justifying Genes with correlated expression across individuals in multiple tissues are potentially informative for systemic genetic activity spanning these tissues. In this context, the tissue-level gene expression data across multiple subjects from the Genotype Tissue Expression (GTEx) Project is a valuable analytical resource. Unfortunately, the GTEx data is fraught with missing entries owing to subjects often contributing only a subset of tissues. In such a scenario, standard techniques of correlation matrix estimation with or without data imputation do not perform well. To solve this problem, we propose \Robocov{}, a novel convex optimization-based framework for robustly learning sparse covariance or inverse covariance matrices for missing data problems. \\
+\textbf{Results:} \Robocov{} produces more interpretable visual representation of correlation and causal structure in simulation settings and GTEx data analysis. We also show that \Robocov{} estimators have a lower false positive rate than competing approaches for missing data problems.  Genes prioritized by the average value of \Robocov{} correlations or partial correlations across tissues are enriched for pathways related to systemic activities such as signaling pathways, circadian clock and immune function. SNPs linked to these prioritized genes showed high enrichment and unique information for blood-related traits; in comparison, no disease signal is observed for SNPs characterized analogously using standard correlation estimator.\\
+\textbf{Availability:} \Robocov{} is available as an R package \url{https://github.com/kkdey/Robocov}. \\
+\textbf{Contact:} \href{kdey@hsph.harvard.edu}{kdey@hsph.harvard.edu}\\
+\textbf{Supplementary information:} Supplementary data are available at \textit{Bioinformatics} 
+online.}
+
+\maketitle
+
+\justifying
+\section{Introduction}
+
+The gene expression data from nearly 50 tissues across more than 500 post-mortem donor individuals from Genotype Tissue Expression (GTEx) project has proved to be a valuable resource for understanding tissue-specific and tissue-shared genetic architecture~\cite{gtex2015, gtex2017, dey2017, aguet2019}. Here we are interested in one specific aspect of tissue-shared gene regulation: the correlation and partial correlation in gene expression for  different tissue pairs based on individual donor level data.  A major challenge in this context is the extensive amount of missing entries in gene expression data---each donor contributes only a subset of tissues for sequencing. 
+Common imputation based methods do not work well here as reported in~\cite{dey2019}, owing to stringent assumptions about missing entries being close to some central tendency (median) or adhering to some low-dimensional representation of the observed entries~\cite{mazumder2010spectral,mazumder2015}. Popular shrinkage and/or sparse correlation or partial correlation estimators such as \textit{corpcor}~\cite{ledoit2003improved, schafer2005shrinkage}, GLASSO~\cite{friedman2008} or CLIME~\cite{cai2011} are not designed for data with missing values. 
+
+A recently proposed approach, \CorShrink{}~\cite{dey2019}, co-authored by one of the authors of this paper (Dey), accounts for missing data through adaptive shrinkage~\cite{stephens2016} of correlations. \CorShrink{} does not guarantee a positive semidefinite (PSD) matrix as part of its EM-based framework, and necessitates a post-hoc modification to ensure a PSD correlation matrix. Furthermore, \CorShrink{} does not extend to conditional graph or partial correlation estimation. Here, we propose a new approach based on convex optimization: \Robocov{} that applies to both covariance and inverse covariance matrix estimation in the presence of missing data under the following regularization principles:
+(a) the covariance matrix is sparse (i.e., has a few nonzero entries) or (b) the inverse covariance matrix is sparse. 
+
+\Robocov{} does not \emph{impute} missing values per-se\footnote{Expectation Maximization (EM)~\cite{Dempster1977} methods typically used for estimation with missing values depend upon probabilistic modeling assumptions and lead to highly nonconvex problems
+posing computational challenges.}---it directly estimates the covariance or inverse covariance matrices in the presence of missing values. To handle missing values, we consider a loss function that depends upon the pairwise covariance terms (computed based on the observed samples) but incorporates an adjustment to guard against our lack of knowledge regarding the missing observations. For inverse covariance estimation, \Robocov{} uses a robust optimization based approach~\cite{ben2009robust,bertsimas2011theory} that accounts for the uncertainty in estimating the pairwise sample covariance terms (due to the presence of missing values). Interestingly, both lead to convex optimization formulations that are amenable to modern optimization techniques~\cite{BV2004}---they are scalable to moderate-large scale instances; and unlike conventional EM methods (that lead to nonconvex optimization tasks), our estimators attain the global solution of the optimization formulations defining the 
+\Robocov{} estimators. 
+
+Our experiments suggest that \Robocov{} estimators for correlation and partial correlation matrices have lower false positive rate compared to competing approaches for missing data problems.  When applied to the GTEx gene expression data with~$\sim70\%$ missing data, \Robocov{} produced less cluttered and highly interpretable visualization of correlation and conditional graph architecture. From a biological perspective, a gene with high correlation in expression across many tissue pairs is potentially reflective of more systemic biological processes spanning multiple tissues. To this end, we prioritized genes based on the average \Robocov{} estimated correlation (partial correlation) across all tissue-pairs; we call them  \Robospan{} (\pRobospan{}) genes. A pathway enrichment analysis of  \Robospan{} (\pRobospan{}) genes showed enrichment in systemic functional pathways and the immune system.  SNPs linked to \Robospan{} (\pRobospan{}) genes were tested for autoimmune disease informativeness by applying Stratified LD-score regression (S-LDSC) to 11 common blood-related traits (5 autoimmune diseases and 6 blood cell traits; average $N$=306K), conditional on a broad set of  annotations. \Robospan{} and \pRobospan{} genes showed high disease informativeness for blood-related traits. In comparison, \Corspan{} genes defined similarly using the standard correlation estimator were non-informative. This highlights the biological and disease-level significance of our work.
+
+\begin{methods}
+\input{methods_bioinfo}
+\end{methods}
+
+\section{Results}\label{sec:results}
+
+\subsection*{Simulation Experiments: Synthetic and Real Data}
+
+We applied \Robocov{} on simulated multivariate normal data from three population correlation structure models (hub, Toeplitz and 1-band precision matrix) with $N$ samples, $P$ features and $\pi$ proportion of missing entries randomly distributed throughout the data matrix (Supplementary Note). Figure~\ref{fig:sim_results} shows results for all three model-settings with $N = 500, P = 50, \pi = 0.5$. In all cases, \Robocov{} generated a sparse estimate of the population correlation $\mathcal{R}$ (Section~\ref{sec:cov-estimator}) or partial correlation $\mathcal{W}$ (Section~\ref{sec:invcov-estimator}). The \Robocov{} correlation estimator captured population structure more effectively for all three models compared to the standard pairwise sample correlation estimator (Figure S1). The \Robocov{} partial correlation estimator also accurately captured the causal structure in the hub and 1-band precision matrix models; for the Toeplitz matrix, it recovered the high partial correlation band immediately flanking the diagonal but not the other alternating positive and negative low correlation bands (Figure \ref{fig:sim_results}). 
+
+\begin{figure}[!tpb]
+\centering
+\scalebox{1}{\includegraphics[width=0.5\textwidth,  trim = 0cm 5cm 0cm 0cm, clip = true ]{Figure1_eps.png}}
+\caption{We applied \Robocov{} correlation and partial correlation estimators on data generated from Hub, Toeplitz or 1-band precision matrix based population models (Supplementary Note) with $N=500$ samples, $P=50$ features and $\pi=0.5$ proportion of missing data. We present the population correlation matrix, population partial correlation matrix, \Robocov{} correlation matrix and \Robocov{} partial correlation matrix sequentially from first to last row.}
+\label{fig:sim_results}
+\end{figure}
+
+
+Recent work~\cite{dey2019} has shown hub-like patterns in expression correlation across tissue pairs for most genes. To this end, we applied \Robocov{} on simulated data for hub population correlation matrix structure for different settings of $N$, $P$ and $\pi$ (Supplementary Note). Two metrics of particular interest were the false positive rate (FPR) and the false negative rate (FNR) (Supplementary Note). We used these metrics to compare \Robocov{} correlation estimator with both the pairwise sample correlation estimator and  \CorShrink{}\cite{dey2019}. Across different ($N, P$, $\pi$)-settings, the \Robocov{} correlation estimator had lower FPR than \CorShrink{}. In comparison, for data with a large number of missing entries (i.e., high $\pi$), FNR for \Robocov{} was worse compared to \CorShrink{} (Table \ref{tab:tab1}). We did not compare against other shrinkage-based correlation estimators such as \textit{PDSCE}\cite{rothman2012} and \textit{corpcor}\cite{schafer2004empirical, schafer2005shrinkage} as (i) they do not account for missing entries in the data and have been shown to be sub-optimal to  \CorShrink{} for fully observed data (see Figure 4 from ref.\cite{dey2019}). 
+
+%against estimators available from GLASSO and CLIME. Data is generated from a hub-structured population covariance matrix with different choices of $N$, $P$ and $\pi$. The three metrics are FP2 (False Positive 2-norm), FPR (False Positive Rate) and FNR (False Negative Rate). See Supplementary Note for the details of the metrics. Results are averaged over 50 replications from the same model. For all three partial correlation estimators:  \Robocov{} partial correlation, GLASSO and CLIME; the optimal sparsity inducing parameter $\lambda$ was chosen by cross-validation
+
+
+\small
+\begin{table}[h]
+\caption{{We compare three metrics: FP2 (False Positive 2-norm), FPR (False Positive Rate) and FNR (False Negative Rate) (Supplementary Note) to compare (i) the  \Robocov{} correlation estimator (\textit{Cor}) against \CorShrink{} and the standard pairwise sample correlation estimator; and (ii) the \Robocov{} partial correlation estimator (\textit{PCor})  against estimators available from GLASSO and CLIME. Data was generated for different (N, P, $\pi$) settings and results were averaged over 50 replications from same model. Optimal $\lambda$ was chosen by cross-validation.}}
+\label{tab:tab1} 
+\begin{tabular}[!t]{|p{0.5cm}|p{1.1cm}|p{0.4cm}|p{0.45cm}|p{0.45cm}|p{0.4cm}|p{0.45cm}|p{0.45cm}|p{0.4cm}|p{0.45cm}|p{0.45cm}|}
+\hline 
+\multicolumn{11}{|c|}{Hub: N = 50, P=50} \\ \hline
+& & \multicolumn{3}{c|}{$\pi$=0} & \multicolumn{3}{c|}{$\pi$=0.25} & \multicolumn{3}{c|}{$\pi$=0.5} \\ \hline
+ Type & Method & FP2 & FPR & FNR &  FP2 & FPR & FNR & FP2 & FPR & FNR \\ \hline 
+\multirow{ 3}{*}{Cor} & \textcolor{red}{Robocov} & 0.05 &   0 &   0  & 0.14 &   0 & 0.14 & 0.26 &   0 & 0.19 \\
+& \textcolor{red}{CorShrink} & 1.4 & 0.01 &  0 & 2.2 & 0.04 & 0.03 &  4 & 0.07 & 0.09 \\
+& \textcolor{red}{Standard} & 6.7 & 0.24 &  0  & 8.8 & 0.30 &  0 &  15 & 0.28 & 0 \\  \hline 
+\multirow{ 3}{*}{PCor} & \textcolor{blue}{Robocov} & 0.08 & 0 & 0.07 & 0.27 & 0.01 & 0.13 & 0.47 & 0 & 0.09 \\
+& \textcolor{blue}{GLASSO} & 0.12 & 0 & 0.15 & 0.29 & 0.01 & 0.15 & 0.59 & 0.02 & 0.12 \\
+& \textcolor{blue}{CLIME} & 1.5 & 0.09 & 0.07 & 1.4 & 0.07 & 0.08 & 1.3 & 0.08 & 0.07 \\ \hline 
+\multicolumn{11}{|c|}{Hub: N = 100, P=50} \\ \hline
+& & \multicolumn{3}{c|}{$\pi$=0} & \multicolumn{3}{c|}{$\pi$=0.25} & \multicolumn{3}{c|}{$\pi$=0.5} \\ \hline
+Type & Method & FP2 & FPR & FNR &  FP2 & FPR & FNR & FP2 & FPR & FNR \\ \hline
+\multirow{ 3}{*}{Cor} & \textcolor{red}{Robocov} & 0.05 &   0 &   0 & 0.06 &   0 &   0 & 0.18 &   0 & 0.15\\
+& \textcolor{red}{CorShrink} & 0.9 &   0 &   0 & 1.3 & 0.02 &   0 & 2.9 & 0.03 & 0.01 \\
+& \textcolor{red}{Standard} & 4.8 & 0.17 &   0 & 6.2 & 0.20 &  0 &  10 & 0.31 &  0 \\ \hline 
+\multirow{ 3}{*}{PCor} & \textcolor{blue}{Robocov} & 0.23 & 0 & 0.06 & 0.21 & 0 & 0.09 & 0.18 & 0.03 & 0.11 \\
+& \textcolor{blue}{GLASSO} & 0.11 & 0 & 0.16 & 0.23 & 0 & 0.22 & 0.29 & 0.01 & 0.24 \\
+& \textcolor{blue}{CLIME}  & 1.8 & 0.12 & 0.08 & 1.8 & 0.14 & 0.09  & 1.8 & 0.16 & 0.11 \\ \hline 
+\multicolumn{11}{|c|}{Hub: N = 500, P=50} \\ \hline
+& & \multicolumn{3}{c|}{$\pi$=0} & \multicolumn{3}{c|}{$\pi$=0.25} & \multicolumn{3}{c|}{$\pi$=0.5} \\ \hline
+Type & Method & FP2 & FPR & FNR &  FP2 & FPR & FNR & FP2 & FPR & FNR \\ \hline
+\multirow{ 3}{*}{Cor} & \textcolor{red}{Robocov}  & 0.03 &   0 &   0 & 0.01 &   0 &   0 & 0.08 &   0 &   0  \\
+& \textcolor{red}{CorShrink} & 0.21 &   0 &   0 & 0.32 &   0 &   0 & 0.83 &   0 &   0\\
+& \textcolor{red}{Standard} & 2.1 & 0.01 &   0 & 2.8 & 0.05 &   0 & 4.4 & 0.14 &   0 \\ \hline 
+\multirow{ 3}{*}{PCor} & \textcolor{blue}{Robocov} & 0.12 & 0 & 0.11 & 0.16 & 0 & 0.12 & 0.11 & 0 & 0.14 \\
+& \textcolor{blue}{GLASSO} & 0.16 & 0 & 0.19 & 0.29 & 0 & 0.20 & 0.19 & 0.02 & 0.20 \\
+& \textcolor{blue}{CLIME} & 2.1 & 0.11 & 0.16 & 2.0 & 0.14 & 0.18 & 2.0 & 0.15 & 0.17 \\ \hline
+\end{tabular}
+\end{table}
+ 
+\normalsize
+Next, we assess the performance of the \Robocov{} partial correlation estimator for the same simulation settings (Table \ref{tab:tab1}). We are not aware of a sparse conditional graph or partial correlation estimation method that directly takes into account missing entries. Nevertheless, we compare the \Robocov{} partial correlation estimator with (i) GLASSO on the pairwise sample correlation estimator $\hat{\Sigma}$ and (ii) CLIME on an imputed data matrix where, the imputation is performed using SoftImpute~\cite{mazumder2015}. In the presence of missing data, \Robocov{} partial correlation estimator showed better FPR and FNR compared to both GLASSO and CLIME-based estimators (Table \ref{tab:tab1}). The underperformance of CLIME may be attributed to the error arising from the imputation step (Table \ref{tab:tab1}).
+
+
+Next, we evaluate the predictive performance of \Robocov{} correlation estimator with pairwise sample correlation estimator and \CorShrink{}. We considered the GTEx gene expression data for an example gene (ARHGAP30) across 544 donors and 53 tissues with close to $70 \%$ missing data owing to subjects contributing only a small fraction of tissues. We split the individual by tissue data for the gene into two equal groups and  compared the estimated correlation matrix (we used different estimators: \Robocov{}, \CorShrink{} and pairwise sample correlation matrix) computed on one half of the individuals with the pairwise sample correlation matrix computed from the other half.  Both \Robocov{} and \CorShrink{} estimators considerably outperformed the pairwise sample correlation estimator, with \CorShrink{} having slightly better predictive accuracy (Figure S2 and Table S1). As \Robocov{} and \CorShrink{} predictive performances are similar, the former may be preferable 
+%in terms of interpretability.
+as it results in sparse estimates, leading to better interpretability. 
+
+
+An an alternative to \Robocov{}, we may consider an estimator obtained by first imputing the missing entries in the data matrix and then estimating the correlation or partial correlation matrix for the complete data. For the same ARHGAP30 gene, we performed imputation by either a low rank factorization (SoftImpute\cite{mazumder2015}, with or without scaling) or a median based approach (replacing the missing entries of a feature by the median value of the observed entries). The correlation matrix obtained by SoftImpute (both  with and without scaling) showed artificial high negative and positive correlation sweeps between brain and non-brain tissues that were not observed in the pairwise correlation matrix (Figure S3). One possible explanation of this is that the data matrices in our case do not seem to have a low rank representation based on eigenvalue analysis (Figure S4).  The median based imputation method on the other hand, is prone to showing false positives---for example, we see a high correlation between Fallopian tube and Cervix-Ectocervix, which is a consequence of only 3 individuals contributing  both the tissues (Figure S3). \Robocov{} can effectively get rid of these edge cases and generate sparser and more robust results compared to these imputation based approaches.
+
+%Based on our simulation studies, we conclude that the \Robocov{} correlation estimator has a lower FPR than both the standard pairwise sample correlation estimator and \CorShrink{}. In terms of predictive performance, \Robocov{} does better than the standard estimator and is comparable to  \CorShrink{}. We also observe that for data with a large number of missing entries and no obvious low rank representation as in case of the GTEx gene expression data, imputation based approaches are sub-optimal and \Robocov{} would be the preferred option in such a scenario. The \Robocov{} partial correlation estimator, on the other hand, showed better performance both in terms of FPR and FNR compared to other competing methods such as GLASSO and CLIME, especially when the proportion of missing entries in the data matrix is high. 
+
+
+
+%%%when there are missing entries in the data than competing approaches.
+
+
+\subsection*{Gene Expression correlation analysis across tissue pairs}
+
+\begin{figure*}[!tpb]
+\centering
+\scalebox{1}{\includegraphics[height=0.7\textheight]{Figure1a.png}}
+\caption{\small {{Illustrative examples of pairwise sample correlation estimator, \Robocov{} correlation and partial correlation estimators for 2 genes}:
+(Left column)  \textbf{ARHGAP30} gene and (Right column) \textbf{GSTM1} gene. Each column shows the (A) pairwise sample correlation estimator, (B) \Robocov{} correlation estimator and  (C) partial correlation estimator stacked from top to bottom.}}
+\label{fig:gtex_demo}
+\end{figure*}
+
+
+We applied \Robocov{} to each of 16,069 cis-genes (genes with at least one significant cis-eQTL) from the GTEx v6 project \cite{dey2017} (see URLs). For each gene, the data matrix had 544 rows (post-mortem donors), 53 columns (tissues) and comprised of $\sim70\%$ missing entries.  Figure \ref{fig:gtex_demo} presents a visual comparison of \Robocov{} correlation and partial correlation estimators with standard pairwise sample correlation matrix for two example genes (ARHGAP30 and GSTM1)---the \Robocov{} estimators are sparse and visually less cluttered than the standard approach. The \Robocov{} correlation structure across tissue pairs varied from one gene to another: some genes showed high correlation across all tissues (e.g. HBB, RPL9), some showed little to no correlation across tissues (e.g. NCCRP1), some showed high intra-Brain correlation but relatively low inter-Brain correlation (e.g. ARHGAP30) (Figures \ref{fig:gtex_examples_main},  S2 and S5). Additionally, two genes with similar correlation profiles may have very distinct expression profiles. For example,  HBB and RPL9 both showed high correlation across all tissue pairs, but they had very  distinct tissue-specific expression profiles. HBB showed high expression in Whole Blood relative to other tissues, while RPL9 had a more uniform expression profile across tissues (Figure \ref{fig:gtex_examples_main}). A similar pattern was observed also for two genes with negligible correlation across tissues, NCCRP1 and RPL21P11 (Figure S5). 
+
+
+
+\begin{figure*}[!tpb]
+\centering
+\scalebox{1}{\includegraphics[height=0.7\textheight]{Figure2.png}}
+\caption{\small {{Examples of genes with high average \Robocov{} correlation across all tissue pairs but with distinct expression profiles. (A)\textbf{RPL9} gene has uniformly high TPM (transcripts per million) values across most tissues (inset picture). (B) \textbf{HBB} shows high expression specifically in Whole Blood (inset picture). The expression profile plots for the genes have been fetched from the GTEx Portal (\url{https://gtexportal.org/home/}).}}}
+\label{fig:gtex_examples_main}
+\end{figure*}
+
+
+
+%A general perception is that genes with high correlation in gene expression  across individuals for all tissue-pairs would be enriched for genes with uniform expression across tissues such as the housekeeping genes. Interestingly, our results in Figure \ref{fig:gtex_examples_main}, seem to suggest otherwise. 
+%%evidence against
+%%this perception.
+
+
+Next, we assign to each gene, a prioritizing score defined by the average value of \Robocov{} correlation (\textit{Robospan-score}) or partial correlation (\textit{pRobospan-score}) across all tissue pairs. Similarly, we also computed the average value of the pairwise sample correlation (\textit{Corspan-score}) across tissues. Then we tested these gene scores for functional relevance. Contrary to expectation, none of the three scores showed significant enrichment in 3,804 housekeeping genes\cite{eisenberg2013} (0.84x, 0.48x and 0.72x for Robospan-score,  pRobospan-score and Corspan-score  respectively). We compared these 3 gene scores with constraint-based metric of gene essentiality such as the absence of loss-of-function(LoF) variants (pLI\cite{Lek2016} and s\_het\cite{cassa2017}). For each of the 50 quantile bins of pLI and s\_het, we computed the median of each of these scores; and compared with the mid-value of the quantile bin. We observed a slight negative trend in all 3 scores with increasing quantile bins of both pLI and  s\_het  (Figure S6). One possible explanation may be that genes with highly correlated expression across all tissues may be driven by tissue-shared regulation machinery which imposes lower selective constraints on these genes. 
+The top 10$\%$ genes from each of the three gene prioritizing scores were used to define gene sets; we call them \Robospan{}, \pRobospan{} and \Corspan{} genes. In a pathway  enrichment analysis\cite{Kamburov2012} of these gene sets, the top enriched pathways comprised of immune system, interferon signaling, heat stress factor (Table S2). Though not among the top 5 pathways, other interesting significant pathways included different signaling pathways (interleukin mediated signaling, NFkB signaling) and circadian clock related pathways (see URLs). The signifcance of pathway enrichment was stronger for \Robospan{} and \pRobospan{} genes compared to \Corspan{}(Table S2). The enrichment of immune related pathways was further backed by high enrichment of these genes in top 10$\%$ specifically expressed genes in Whole Blood (SEG-Blood\cite{Finucane2018}) (\Robospan{}: 1.48x, \pRobospan{}: 2.50x, \Corspan{}: 1.45x). One may conjecture that this enrichment is an artifact caused by contamination of blood with GTEx tissue samples. This, however, is countered by examples of genes that have high correlation across all tissues but expression-wise, are specific to tissues that are not Whole Blood (Figure S7). We also see examples of specifically expressed genes in Whole Blood that have low Robospan-score (Figure S8).
+
+\subsection*{Heritability analysis of blood-related traits}
+
+%We conclude that \Robocov{} produces less visually cluttered representation of correlation and partial correlation structure of gene expression across tissue pairs for individual genes. We also show that genes with high average \Robocov{} correlation or partial correlation across tissue pairs tend to have lower selection constraint and are not enriched for housekeeping genes. The top genes with highest average \Robocov{} correlation or partial correlation across tissues are enriched for immune related functionality among other systemic pathways such as heat stress factors, circadian clock etc. This is further backed by enrichment of \Robospan{} and \pRobospan{} genes with specifically expressed genes in Blood. 
+The enrichment of \Robospan{}, \pRobospan{} and \Corspan{} genes with SEG-Blood genes and immune related pathways prompted us to test whether these genes are uniquely informative for blood-related complex diseases and traits.
+
+\begin{figure}[!tpb]
+\centering
+\scalebox{1}{\includegraphics[width=0.4\textwidth]{Figure3.png}}
+\caption{\small {\textbf{Disease informativeness of 5kb and 100kb SNP annotations for \Corspan{}, \Robospan{} and \pRobospan{} gene sets}: (A) Heritability enrichment, conditional on baseline-LD model (v2.1). The base enrichment level is 1. (B) Standardized effect size ($\tau^{\star}$) conditional on baseline-LD model for \Corspan{} (left column, white), \Robospan{} (middle column, red) and \pRobospan{} (right column, blue) gene sets. Results are meta-analyzed across 11 blood and autoimmune traits. ** denotes annotations that are significant after Bonferonni correction ($P < 0.05/8$) where $8$ is the total number of SNP annotations tested. Error bars denote 95$\%$ confidence intervals. Numerical results are reported in Table S4.}}
+\label{fig:Robocov_marginal}
+\end{figure}
+
+For each gene set, we define  SNP-level annotations to test for disease heritability. We define an \emph{annotation} as an assignment of a numeric value to each SNP with minor allele count $\geq$5 in a 1000 Genomes Project European reference panel\cite{1000G2015, Finucane2015}. For each gene set X, we generate two binary SNP-level annotations -- we assign a value of 1 to a SNP if it lies within 5kb or 100kb window upstream and downstream of a gene in the gene set and 0 otherwise; this strategy has been used in several previous works\cite{Finucane2018, Kim2019, deLeeuw2015}.
+
+We assessed the informativeness of SNP annotations for disease heritability by applying stratified LD score regression (S-LDSC)\cite{Finucane2015} conditional on 86 baseline annotations comprising of coding, conserved, epigenomic and LD related annotations (this is called the baseline-LD model; here we use version 2.1\cite{gazal2017}). S-LDSC results were meta-analyzed across 11 relatively independent blood-related traits (5 autoimmune diseases and 6 blood traits (Table S3).  We considered two S-LDSC metrics for comparison: enrichment and standardized effect size ($\tau^{\star}$) (Supplementary Note).  Enrichment is defined as the proportion of heritability explained by SNPs in an annotation divided by the proportion of SNPs in the annotation\cite{Finucane2015}. Standardized effect size ($\tau^{\star}$) is defined as the proportionate change in per-SNP heritability associated with a 1 standard deviation increase in the value of the annotation, conditional on other annotations included in the model\cite{gazal2017, Hormozdiari2018}; unlike enrichment, $\tau^{\star}$ quantifies effects that are unique to the focal annotation and is a better metric for disease informativeness\cite{dey2019, Kim2019, Finucane2018, Hormozdiari2018}. 
+
+%In our ``marginal'' analyses, we estimated $\tau^{\star}$ for each focal annotation conditional on the 90 baseline-LD$^\star$ annotations. 
+
+All $6$ annotations (5kb and 100kb for the 3 gene scores) were significantly enriched when meta-analyzed across 11 blood and autoimmune traits. However, SNP annotations corresponding to \Robospan{} and \pRobospan{} gene sets showed higher enrichment than  \Corspan{} genes (Figure \ref{fig:Robocov_marginal} and Table S4). More importantly, 2 \Robospan{}, 2 \pRobospan{} and 0 \Corspan{} annotations showed significant $\tau^{\star}$ conditional on the baseline-LD annotations after Bonferonni correction (Figure \ref{fig:Robocov_marginal} and Table S4). When restricted to the 5 autoimmune traits,  2 \Robospan{}, 0 \pRobospan{} and 0 \Corspan{} SNP annotations showed unique signal (Table S5). Even when these annotations were modeled jointly with SEG-Blood\cite{Finucane2018} genes and subjected to forward stepwise elimination similar to ref.\cite{Kim2019, dey2019}, 1 \Robospan{} annotation (100kb) still remains significantly informative, suggesting unique disease information over SEG-Blood genes (Table S6). 
+
+
+
+\input{discussion}
+
+\bibliographystyle{unsrt}
+\begin{thebibliography}{}
+
+\bibitem{gtex2015}
+GTEx Consortium.
+\newblock The genotype-tissue expression (gtex) pilot analysis: multitissue gene regulation in humans.
+\newblock {\em Science}, 348(6235):648--660, 2015.
+
+\bibitem{gtex2017}
+GTEx Consortium.
+\newblock Genetic effects on gene expression across human tissues.
+\newblock {\em Nature}, 550(7675):204, 2017.
+
+\bibitem{dey2017}
+K.K. Dey, C.J. Hsiao, and M.~Stephens.
+\newblock Visualizing the structure of rna-seq expression data using grade of
+  membership models.
+\newblock {\em PLoS genetics}, 13 (3):p.e1006599, 2017.
+
+\bibitem{aguet2019}
+F.~Aguet et~al.
+\newblock The gtex consortium atlas of genetic regulatory effects across human
+  tissues.
+\newblock {\em BioRxiv}, page 787903, 2019.
+
+\bibitem{dey2019}
+K.K. Dey and M~Stephens.
+\newblock Empirical bayes shrinkage estimation of correlations, with
+  applications.
+\newblock {\em bioRxiv}, 2018.
+
+\bibitem{mazumder2010spectral}
+R.~Mazumder, T.~Hastie, and R.~Tibshirani.
+\newblock Spectral regularization algorithms for learning large incomplete
+  matrices.
+\newblock {\em Journal of machine learning research}, 11(Aug):2287--2322, 2010.
+
+\bibitem{mazumder2015}
+T.~Hastie and R.~Mazumder.
+\newblock softimpute: Matrix completion via iterative soft-thresholded svd.
+\newblock {\em R package version, 1.}, 2015.
+
+\bibitem{ledoit2003improved}
+O.~Ledoit and M.~Wolf.
+\newblock Improved estimation of the covariance matrix of stock returns with an
+  application to portfolio selection.
+\newblock {\em Journal of empirical finance}, 10(5):603--621, 2003.
+
+\bibitem{schafer2005shrinkage}
+J.~Sch{\"a}fer and K.~Strimmer.
+\newblock A shrinkage approach to large-scale covariance matrix estimation and
+  implications for functional genomics.
+\newblock {\em Statistical applications in genetics and molecular biology},
+  4(1), 2005.
+
+\bibitem{friedman2008}
+J.~Friedman, T.~Hastie, and R.~Tibshirani.
+\newblock Sparse inverse covariance estimation with the graphical lasso.
+\newblock {\em Biostatistics}, 9(3):432--441, 2008.
+
+\bibitem{cai2011}
+T.~Cai, W.~Liu, and X.~Luo.
+\newblock A constrained l1 minimization approach to sparse precision matrix
+  estimation.
+\newblock {\em Journal of the American Statistical Association},
+  106(494):594--607, 2011.
+
+\bibitem{stephens2016}
+M.~Stephens.
+\newblock False discovery rates: a new deal.
+\newblock {\em Biostatistics}, 18(2):275--294, 2016.
+
+\bibitem{Dempster1977}
+A.P. Dempster, N.M. Laird, and D.B. Rubin.
+\newblock Maximum likelihood from incomplete data via the em algorithm.
+\newblock {\em Journal of the Royal Statistical Society: Series B
+  (Methodological)}, 39(1):p.1--22, 1977.
+
+\bibitem{ben2009robust}
+A.~Ben-Tal, L.~El~Ghaoui, and A.~Nemirovski.
+\newblock {\em Robust optimization}, volume~28.
+\newblock Princeton University Press, 2009.
+
+\bibitem{bertsimas2011theory}
+D.~Bertsimas, D.B. Brown, and C.~Caramanis.
+\newblock Theory and applications of robust optimization.
+\newblock {\em SIAM review}, 53(3):464--501, 2011.
+
+\bibitem{BV2004}
+Stephen Boyd and Lieven Vandenberghe.
+\newblock {\em Convex Optimization}.
+\newblock Cambridge University Press, Cambridge, 2004.
+
+\bibitem{hastie2015statistical}
+Trevor Hastie, Robert Tibshirani, and Martin Wainwright.
+\newblock {\em Statistical learning with sparsity: the lasso and
+  generalizations}.
+\newblock Chapman and Hall/CRC, 2015.
+
+\bibitem{o2016conic}
+Brendan O’donoghue, Eric Chu, Neal Parikh, and Stephen Boyd.
+\newblock Conic optimization via operator splitting and homogeneous self-dual
+  embedding.
+\newblock {\em Journal of Optimization Theory and Applications},
+  169(3):1042--1068, 2016.
+
+\bibitem{Boyd2004}
+S.~Boyd, S.P. Boyd, and L~Vandenberghe.
+\newblock {\em Convex optimization}.
+\newblock Cambridge university press, 2004.
+
+\bibitem{Fu2017}
+A.~Fu, B.~Narasimhan, and S.~Boyd.
+\newblock Cvxr: An r package for disciplined convex optimization.
+\newblock {\em arXiv preprint arXiv:1711.07582}, 2017.
+
+\bibitem{fisher1915}
+R.A. Fisher.
+\newblock Frequency distribution of the values of the correlation coefficient
+  in samples from an indefinitely large population.
+\newblock {\em Biometrika}, 10(4):507--521, 1915.
+
+\bibitem{fisher1921}
+R.A. Fisher.
+\newblock On the probable error of a coefficient of correlation deduced from a
+  small sample.
+\newblock {\em Metron}, 1:3--32, 1921.
+
+\bibitem{rothman2012}
+A~J Rothman.
+\newblock Positive definite estimators of large covariance matrices.
+\newblock {\em Biometrika}, 99(3):733--740, 2012.
+
+\bibitem{schafer2004empirical}
+J.~Sch{\"a}fer and K.~Strimmer.
+\newblock An empirical bayes approach to inferring large-scale gene association
+  networks.
+\newblock {\em Bioinformatics}, 21(6):754--764, 2004.
+
+\bibitem{eisenberg2013}
+E.~Eisenberg and E.Y. Levanon.
+\newblock Human housekeeping genes, revisited.
+\newblock {\em TRENDS in Genetics}, 29(10):569--574, 2013.
+
+\bibitem{Lek2016}
+M.~Lek et~al.
+\newblock Analysis of protein-coding genetic variation in 60,706 humans.
+\newblock {\em Nature}, 536(7616):285, 2016.
+
+\bibitem{cassa2017}
+C.A. Cassa et~al.
+\newblock Estimating the selective effects of heterozygous protein-truncating
+  variants from human exome data.
+\newblock {\em Nature genetics}, 49(5):806, 2017.
+
+\bibitem{Kamburov2012}
+A.~Kamburov et~al.
+\newblock The consensuspathdb interaction database: 2013 update.
+\newblock {\em Nucleic acids research}, 41(D1):D793--D800, 2012.
+
+\bibitem{Finucane2018}
+H.K. Finucane, Y.A. Reshef, V.~Anttila, K.~Slowikowski, A.~Gusev, A.~Byrnes,
+  et~al.
+\newblock {Heritability enrichment of specifically expressed genes identifies
+  disease-relevant tissues and cell types}.
+\newblock {\em Nature genetics}, 50:621, 2018.
+
+\bibitem{1000G2015}
+1000 Genomes~Project Consortium.
+\newblock A global reference for human genetic variation.
+\newblock {\em Molecular cell}, 526(7571):p.68, 2015.
+
+\bibitem{Finucane2015}
+H.K. Finucane, B.~Bulik-Sullivan, A.~Gusev, G.~Trynka, Y.~Reshef, P.R. Loh,
+  V.~Anttila, H.~Xu, C.~Zang, K.~Farh, and S.~Ripke.
+\newblock {Partitioning heritability by functional annotation using genome-wide
+  association summary statistics}.
+\newblock {\em Nature genetics}, 47:1228, 2015.
+
+\bibitem{Kim2019}
+S.S. Kim et~al.
+\newblock {Genes with high network connectivity are enriched for disease
+  heritability}.
+\newblock {\em The American Journal of Human Genetics}, 104:pp.896--913, 2019.
+
+\bibitem{deLeeuw2015}
+C.A. de~Leeuw et~al.
+\newblock Magma: generalized gene-set analysis of gwas data.
+\newblock {\em PLoS computational biology}, 11(4), 2015.
+
+\bibitem{gazal2017}
+S.~Gazal et~al.
+\newblock Linkage disequilibrium–dependent architecture of human complex
+  traits shows action of negative selection.
+\newblock {\em Nat. Genet}, 49 (10):1421, 2017.
+
+\bibitem{Hormozdiari2018}
+F.~Hormozdiari et~al.
+\newblock Leveraging molecular quantitative trait loci to understand the
+  genetic architecture of diseases and complex traits.
+\newblock {\em Nature genetics}, 50(7):1041, 2018.
+
+\bibitem{Sulis2017}
+I.~Sulis and M.~Porcu.
+\newblock Handling missing data in item response theory. assessing the accuracy
+  of a multiple imputation procedure based on latent class analysis.
+\newblock {\em Journal of Classification}, 34(2):p.327--359, 2017.
+
+\bibitem{Bauermeister2019}
+S.~Bauermeister and J.~Gallacher.
+\newblock A psychometric evaluation of the 12-item epq-r neuroticism scale in
+  384,183 uk biobank participants using item response theory (irt).
+\newblock {\em BioRxiv}, page p.741249, 2019.
+
+\bibitem{Bycroft2018}
+C.~Bycroft et~al.
+\newblock The uk biobank resource with deep phenotyping and genomic data.
+\newblock {\em Nature}, 562(7726):p.203, 2018.
+
+\bibitem{jostins2012}
+L.~Jostins et~al.
+\newblock Host-microbe interactions have shaped the genetic architecture of
+  inflammatory bowel disease.
+\newblock {\em Nature}, 491:119--124, 2012.
+
+\bibitem{okada2014}
+Y.~Okada et~al.
+\newblock Genetics of rheumatoid arthritis contributes to biology and drug
+  discovery.
+\newblock {\em Nature}, 506:376--381, 2014.
+
+\bibitem{Dubois2010}
+P.C. Dubois et~al.
+\newblock {Multiple common variants for celiac disease influencing immune gene
+  expression.}
+\newblock {\em Nature genetics}, 42(4):p.295, 2010.
+
+\bibitem{Bentham2015}
+J.~Bentham et~al.
+\newblock {Genetic association analyses implicate aberrant regulation of innate
+  and adaptive immunity genes in the pathogenesis of systemic lupus
+  erythematosus.}
+\newblock {\em Nature genetics}, 47(12):p.1457, 2015.
+
+\end{thebibliography}
+
+
+%This is where your bibliography is generated. Make sure that your .bib file is actually called library.bib
+%\renewcommand*{\bibfont}{\footnotesize}
+%{\small
+%\bibliography{refs}}
+
+%%This defines the bibliographies style. Search online for a list of available styles.
+%%\small
+%
+%\clearpage
+\small
+%\input{supplementary_note}
+%\normalsize
+%\input{supplementary_figures}
+%\input{supplementary_tables}
+\end{document}
+
